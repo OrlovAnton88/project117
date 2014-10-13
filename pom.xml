@@ -178,12 +178,6 @@
             <version>${hibernate.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.jolbox</groupId>
-            <artifactId>bonecp</artifactId>
-            <version>0.7.1.RELEASE</version>
-        </dependency>
-
         <!-- Hibernate Validator -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -226,12 +220,12 @@
 				folder. -->
 			<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
 			<id>openshift</id>
-            <properties>
-                <db.username>admin9yb13Aj</db.username>
-                <db.password>_G2M89X-DpNC</db.password>
-                <!--<db.url>mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/117</db.url>-->
-                <db.url>jdbc:mysql://${env.OPENSHIFT_MYSQL_DB_HOST}:${env.OPENSHIFT_MYSQL_DB_PORT}/${env.OPENSHIFT_APP_NAME}</db.url>
-            </properties>
+            <!--<properties>-->
+                <!--<db.username>admin9yb13Aj</db.username>-->
+                <!--<db.password>_G2M89X-DpNC</db.password>-->
+                <!--&lt;!&ndash;<db.url>mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/117</db.url>&ndash;&gt;-->
+                <!--<db.url>jdbc:mysql://${env.OPENSHIFT_MYSQL_DB_HOST}:${env.OPENSHIFT_MYSQL_DB_PORT}/${env.OPENSHIFT_APP_NAME}</db.url>-->
+            <!--</properties>-->
 			<build>
 				<finalName>project117</finalName>
 				<plugins>

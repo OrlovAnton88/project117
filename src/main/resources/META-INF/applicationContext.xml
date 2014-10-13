@@ -49,9 +49,9 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd http://www.springfr
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="${db.url}" />
-        <property name="username" value="${db.username}" />
-        <property name="password" value="${db.password}" />
+        <property name="url" value="jdbc:mysql://${OPENSHIFT_MYSQL_DB_HOST}:${OPENSHIFT_MYSQL_DB_PORT}/${OPENSHIFT_APP_NAME}" />
+        <property name="username" value="${OPENSHIFT_MYSQL_DB_USERNAME}"/>
+        <property name="password" value="${OPENSHIFT_MYSQL_DB_PASSWORD}" />
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
