@@ -241,7 +241,7 @@
 			</build>
 		</profile>
         <profile>
-            <id>oav</id>
+            <id>oav-home</id>
             <properties>
                 <db.username>root</db.username>
                 <db.password>mouse</db.password>
@@ -269,6 +269,34 @@
             </build>
         </profile>
         <profile>
+            <id>oav-work</id>
+            <properties>
+                <db.username>root</db.username>
+                <db.password>350301</db.password>
+                <db.url>jdbc:mysql://localhost:3306/project117</db.url>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>tomcat-maven-plugin</artifactId>
+                        <version>1.1</version>
+                        <configuration>
+                            <port>8080</port>
+                            <path>/project117</path>
+                            <uriEncoding>UTF-8</uriEncoding>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>localTomcat</id>
             <build>
                 <!--<finalName>project117</finalName>-->
@@ -279,12 +307,12 @@
                         <version>1.1</version>
                         <configuration>
                             <server>tomcat</server>
-                            <!--<url>http://localhost:8080/manager/html</url>-->
+                            <url>http://localhost:8081/manager/text</url>
                             <username>admin</username>
                             <password>password</password>
                             <port>8080</port>
                             <path>/project117</path>
-                            <warFile>target/117.war</warFile>
+                            <warFile>target/project117-1.0.war</warFile>
                             <uriEncoding>UTF-8</uriEncoding>
                         </configuration>
                     </plugin>

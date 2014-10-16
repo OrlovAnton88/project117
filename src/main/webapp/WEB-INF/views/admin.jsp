@@ -15,9 +15,9 @@
 <body>
 <div class="container">
     <div class="row">
-        <a href="/uploadApproofs"> <button type="button" class="btn btn-default" id="uploadApproofs">Load HTMLAcademy tasks</button> </a>
-        <a href="./uploadUsers"> <button type="button" class="btn btn-default" id="uploadUsers">upload users</button> </a>
-       <a href="/admin/rescan"> <button type="button" class="btn btn-default" id="rescan">Просканировать HTMLAcademy</button> </a>
+        <a href="admin/uploadApproofs"> <button type="button" class="btn btn-default" id="uploadApproofs">Load HTMLAcademy tasks</button> </a>
+        <a href="admin/uploadUsers"> <button type="button" class="btn btn-default" id="uploadUsers">upload users</button> </a>
+       <a href="admin/rescan"> <button type="button" class="btn btn-default" id="rescan">Просканировать HTMLAcademy</button> </a>
 
     </div>
     </div>

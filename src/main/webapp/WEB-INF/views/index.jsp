@@ -7,10 +7,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Рейтинг группы 117 </title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"></link>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" type="text/css"></link>
+    <%--<link rel="stylesheet" href="static/css/style.css" type="text/css"></link>--%>
 </head>
 <body>
 <div class="container">
+    <div class="row">
+        <div class ="top_menu">
+            <ul class="nav nav-pills" role="tablist">
+            <li class="active"><a href="#">Главная</a></li>
+            <li><a href="#">Учебные материалы</a></li>
+            <li><a href="#">Расписание</a></li>
+        </ul>
+        </div>
+    </div>
     <div class="row">
         <h1 class="page-header">&#60;HTML race&#47;&#62;
             <small>Группа 117</small>

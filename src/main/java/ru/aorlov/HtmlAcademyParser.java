@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.aorlov.model.Approof;
 import ru.aorlov.model.Course;
@@ -54,13 +55,20 @@ public class HtmlAcademyParser {
     private List<User> cachedUsers;
 
 
+    @Scheduled(fixedDelay = 3600000)
     public void parseSite() {
 
+        LOGGER.info("Rescanning HTML academy web-site...");
         List<User> users = userService.findAll();
         Document doc = null;
         for (User user : users) {
             String link = user.getHtmlAcademyLink();
             try {
+               try{
+                   Thread.sleep(1000);
+               } catch (InterruptedException ex){
+                   LOGGER.error("Error waiting 1 sec. ", ex);
+               }
                 doc = Jsoup.connect(link).timeout(3000).get();
             } catch (IOException ex) {
               LOGGER.error("Error getting link [" + link + ']', ex);
@@ -87,6 +95,7 @@ public class HtmlAcademyParser {
             saveApproofs(user, detailedTable);
 
         }
+        LOGGER.info("Rescanning finished.");
     }
 
     private void saveApproofs(User user, Elements table) {
@@ -126,7 +135,6 @@ public class HtmlAcademyParser {
 
             userApproofService.save(userApproof);
         }
-        user.setUserApproofs(approofs);
     }
 
     public void loadUsers(List<String> links) throws IOException {
@@ -213,106 +221,5 @@ public class HtmlAcademyParser {
 //        createUsers();
 //    }
 
-//
-//
-//    public List<User> getUsers() throws IOException {
-//        if (cachedUsers == null || cachedUsers.isEmpty()) {
-//            LOGGER.info("Cache is empty...");
-//            createUsers();
-//        }
-//        return cachedUsers;
-//    }
-//
-//
-//    private void createUsers() throws IOException {
-//        List<User> users = new ArrayList<User>();
-//        for (String link : Links.getLinks()) {
-//            try {
-//                users.add(createUser(link));
-//            } catch (IOException ex) {
-//                throw new IOException("Error creationg user by link [" + link + ']', ex);
-//            }
-//        }
-//        userService.save(users);
-//    }
-//
-//
-//    private User createUser(String link) throws IOException {
-//
-//        Document doc = Jsoup.connect(link).get();
-//        Elements name = doc.select(NAME_PATH);
-//        Elements scoressSum = doc.select(SCORES_SUM);
-//        Elements coursesOkNum = doc.select(COURSES_OK_NUM);
-//        Elements detailedTable = doc.select(DETAILED_TABLE);
-//
-//
-//        if (name.size() != 1) {
-//            throw new IllegalArgumentException("Not 1  name for one user. Link: " + link);
-//        }
-//
-//        if (scoressSum.size() != 1) {
-//            throw new IllegalArgumentException("Not 1  score sum for one user. Link: " + link);
-//        }
-//
-//        if (coursesOkNum.size() != 1) {
-//            throw new IllegalArgumentException("Not 1 coursesOkNum for one user. Link: " + link);
-//        }
-//
-//        int scoresSumInt = Integer.valueOf(scoressSum.get(0).text().replace(" ", ""));
-//        int coursesOkNumInt = Integer.valueOf(coursesOkNum.get(0).text().trim());
-//        String nameClean = name.get(0).text();
-
-//        List<UserApproof> approofs = getApproofs(detailedTable);
-//
-//        return new User(nameClean, link, scoresSumInt, coursesOkNumInt, null);
-//    }
-//
-//    public List<UserApproof> getApproofs(Elements table) {
-//        if (table.size() != 1) {
-//            throw new IllegalArgumentException("fail to scrap single table");
-//        }
-//
-//        List<UserApproof> approofs = new ArrayList();
-//
-//        Elements rows = table.get(0).select("tr");
-//
-//        for (org.jsoup.nodes.Element row : rows) {
-//
-//
-//            Elements courseName = row.select("td:nth-child(1)");
-//            Elements scores = row.select("td:nth-child(3)");
-//
-//            if (courseName.size() == 0 || scores.size() == 0) {
-//                continue;
-//            }
-//
-//            String[] totalPased = scores.get(0).text().split("/");
-//            int passed = Integer.valueOf(totalPased[0].trim());
-//            int total = Integer.valueOf(totalPased[1].trim());
-//            String name = courseName.get(0).text();
-//
-//            if (passed == 0) {
-//                //do not need non-started courses
-//                continue;
-//            }
-//
-//            Course course = courseService.find(Course.HTML_ACADEMY);
-////            Approof approof = approofService.findByName(name);
-////            if(approof == null){
-////                approofService.save(new Approof(name,"N/A",total,course));
-////            }
-////            approof = approofService.findByName(name);
-//            Approof approof = new Approof(name,"N/A",total,course);
-//
-//
-//            UserApproof userApproof = new UserApproof(passed,
-//
-//            approofs.add(userApproof);
-//
-//        }
-//
-//        return approofs;
-//
-//    }
 
 }
