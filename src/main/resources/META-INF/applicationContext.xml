@@ -48,19 +48,19 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd http://www.springfr
         </property>
     </bean>
 
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://127.5.199.2:3306/project117" />
-        <property name="username" value="admin9yb13Aj"/>
-        <property name="password" value="_G2M89X-DpNC" />
-    </bean>
-
     <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
         <!--<property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
-        <!--<property name="url" value="${db.url}" />-->
-        <!--<property name="username" value="${db.username}"/>-->
-        <!--<property name="password" value="${db.password}" />-->
+        <!--<property name="url" value="jdbc:mysql://127.5.199.2:3306/project117" />-->
+        <!--<property name="username" value="admin9yb13Aj"/>-->
+        <!--<property name="password" value="_G2M89X-DpNC" />-->
     <!--</bean>-->
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="${db.url}" />
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}" />
+    </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="myEmf" />
