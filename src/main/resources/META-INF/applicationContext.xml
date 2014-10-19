@@ -2,26 +2,34 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-3.0.xsd
 http://www.springframework.org/schema/mvc
-http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx.xsd
+http://www.springframework.org/schema/data/jpa
+http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+http://www.springframework.org/schema/task
+http://www.springframework.org/schema/task/spring-task.xsd">
     <!--****************************************************************************************
     * Core
     ****************************************************************************************-->
-    <context:annotation-config />
+    <context:annotation-config/>
 
     <context:component-scan base-package="ru.aorlov">
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
 
-    <mvc:annotation-driven />
+    <mvc:annotation-driven conversion-service="conversionService"/>
 
+    <tx:annotation-driven/>
 
     <jpa:repositories base-package="ru.aorlov.repository"/>
 
@@ -33,12 +41,21 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd http://www.springfr
 
     <task:scheduler id="taskScheduler" pool-size="1"/>
 
+    <bean id="conversionService"
+          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="ru.aorlov.web.IdToCategoryConverter"/>
+            </set>
+        </property>
+    </bean>
+
 
     <bean id="myEmf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan" value="ru.aorlov.model" />
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="ru.aorlov.model"/>
         <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
         </property>
         <property name="jpaProperties">
             <props>
@@ -49,28 +66,46 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd http://www.springfr
     </bean>
 
     <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
-        <!--<property name="url" value="jdbc:mysql://127.5.199.2:3306/project117" />-->
+        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
+        <!--<property name="url" value="jdbc:mysql://127.5.199.2:3306/project117"/>-->
         <!--<property name="username" value="admin9yb13Aj"/>-->
-        <!--<property name="password" value="_G2M89X-DpNC" />-->
+        <!--<property name="password" value="_G2M89X-DpNC"/>-->
     <!--</bean>-->
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="${db.url}" />
-        <property name="username" value="${db.username}"/>
-        <property name="password" value="${db.password}" />
+    <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+    <property name="url" value="${db.url}" />
+    <property name="username" value="${db.username}"/>
+    <property name="password" value="${db.password}" />
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="myEmf" />
+        <property name="entityManagerFactory" ref="myEmf"/>
     </bean>
-    <tx:annotation-driven />
+
 
     <bean id="persistenceExceptionTranslationPostProcessor"
-          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
 
+    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="lang"/>
+    </bean>
 
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="ru"/>
+    </bean>
+
+    <bean id="handlerMapping"
+          class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+        <property name="interceptors">
+            <ref bean="localeChangeInterceptor"/>
+        </property>
+    </bean>
 
 </beans>

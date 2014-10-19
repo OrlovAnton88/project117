@@ -59,8 +59,14 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <context-param>
+        <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+        <param-value>messages</param-value>
+    </context-param>
+
+
     <welcome-file-list>
-        <welcome-file>/index.html</welcome-file>
+        <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
 </web-app>

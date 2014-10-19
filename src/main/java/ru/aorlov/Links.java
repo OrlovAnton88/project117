@@ -25,6 +25,7 @@ public class Links {
         links.add(PATH + "id48084");
         links.add(PATH + "id48082");
         links.add(PATH + "id48087");
+        links.add(PATH + "id47562");
 
         return links;
 

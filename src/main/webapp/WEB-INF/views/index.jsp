@@ -9,48 +9,10 @@
     <title>Рейтинг группы 117 </title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
           type="text/css">
-    <link rel="stylesheet" href="static/css/style.css" type="text/css">
+    <link rel="stylesheet" href="<c:url value="/static/css/style.css"/>" type="text/css">
 </head>
 <body>
-<%--Example http://getbootstrap.com/examples/navbar-fixed-top/--%>
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">&#60;HTML race&#47;&#62;</a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Главная</a></li>
-                <li><a href="#about">Учебные материалы</a></li>
-                <li><a href="#contact">Расписание</a></li>
-                <%--<li class="dropdown">--%>
-                    <%--<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>--%>
-                    <%--<ul class="dropdown-menu" role="menu">--%>
-                        <%--<li><a href="#">Action</a></li>--%>
-                        <%--<li><a href="#">Another action</a></li>--%>
-                        <%--<li><a href="#">Something else here</a></li>--%>
-                        <%--<li class="divider"></li>--%>
-                        <%--<li class="dropdown-header">Nav header</li>--%>
-                        <%--<li><a href="#">Separated link</a></li>--%>
-                        <%--<li><a href="#">One more separated link</a></li>--%>
-                    <%--</ul>--%>
-                <%--</li>--%>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Контакты</a></li>
-                <li><a href="#">Вход</a></li>
-                <li class="active"><a href="http://vk.com/osnovarabotavinternete">VK</a></li>
-            </ul>
-        </div>
-        <!--/.nav-collapse -->
-    </div>
-</div>
+<jsp:include page="navigation.jsp"/>
 <div class="container">
     <%--<div class="row">--%>
     <%--<div class ="navbar navbar-static-top top_menu">--%>
@@ -81,7 +43,7 @@
                     <td>${status.index+1}</td>
                     <td><span style="color: green;" class="glyphicon glyphicon-thumbs-up"></span>&nbsp;<a
                             href="<c:out value="${user.htmlAcademyLink}"/>" target="_blank"> <c:out
-                            value="${user.userName}"></c:out> </a></td>
+                            value="${user.userName}"/> </a></td>
                     <td><c:out value="${user.scores}"/></td>
                     <td><c:out value="${user.coursesFinished}"/></td>
                     <td>
