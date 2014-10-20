@@ -45,12 +45,12 @@
                 <td><c:out value="${material.name}"/></td>
                 <%--<td><c:out value="${person.firstName}"/></td>--%>
                 <td>
-                    <%--<a href="/person/edit/<c:out value="${person.id}"/>"><spring:message code="person.edit.link.label"/></a>--%>
+                    <a href="${pageContext.request.contextPath}/material/edit/<c:out value="${material.meterialId}"/>"><spring:message code="material.edit.link.label"/></a>
                 todo
                 </td>
                 <td>
                     todo
-                    <%--<a href="/person/delete/<c:out value="${person.id}"/>"><spring:message code="person.delete.link.label"/></a>--%>
+                    <a href="${pageContext.request.contextPath}/material/delete/<c:out value="${material.meterialId}"/>"><spring:message code="material.delete.link.label"/></a>
                 </td>
             </tr>
         </c:forEach>

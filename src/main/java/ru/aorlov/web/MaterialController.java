@@ -8,15 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.aorlov.dto.MaterialDTO;
 import ru.aorlov.model.studymaterial.Category;
 import ru.aorlov.model.studymaterial.Material;
 import ru.aorlov.service.studymaterial.CategoryService;
+import ru.aorlov.service.studymaterial.MaterialNotFoundException;
 import ru.aorlov.service.studymaterial.MaterialService;
 
 import javax.annotation.Resource;
@@ -39,14 +37,20 @@ public class MaterialController {
     private static final String MODEL_ATTRIBUTE_CATEGORY = "category";
 
     private static final String MATERIAL_ADD_FORM_VIEW = "/material/create";
+    private static final String MATERIAL_EDIT_FORM_VIEW = "/material/edit";
     protected static final String MATERIAL_LIST_VIEW = "/material/material_list";
-    protected static final String REQUEST_MAPPING_LIST = "/material";
+    protected static final String REQUEST_MAPPING_LIST = "/material/list";
     private static final String VIEW_REDIRECT_PREFIX = "redirect:";
 
     protected static final String FEEDBACK_MESSAGE_KEY_MATERIAL_CREATED = "feedback.message.material.created";
     protected static final String FEEDBACK_MESSAGE_KEY_MATERIAL_DELETED = "feedback.message.material.deleted";
     protected static final String FEEDBACK_MESSAGE_KEY_MATERIAL_EDITED = "feedback.message.material.edited";
     private static final String FLASH_FEEDBACK_MESSAGE = "feedbackMessage";
+    private static final String FLASH_ERROR_MESSAGE = "errorMessage";
+
+
+    protected static final String ERROR_MESSAGE_KEY_DELETED_MATERIAL_WAS_NOT_FOUND = "error.message.deleted.not.found";
+    protected static final String ERROR_MESSAGE_KEY_EDITED_MATERIAL_WAS_NOT_FOUND = "error.message.edited.not.found";
 
     @Resource
     private MessageSource messageSource;
@@ -62,12 +66,59 @@ public class MaterialController {
 
         LOGGER.debug("showCreateMaterialForm invoked");
 
-       List<Category> categories =  categoryService.findAll();
+        List<Category> categories = categoryService.findAll();
         model.addAttribute(MODEL_ATTRIBUTE_CATEGORIES, categories);
         model.addAttribute(MODEL_ATTRIBUTE_MATERIAL, new MaterialDTO());
 
         return MATERIAL_ADD_FORM_VIEW;
     }
+
+
+    @RequestMapping(value = "/material/delete/{id}", method = RequestMethod.GET)
+    public String delete(@PathVariable("id") Long id, RedirectAttributes attributes) {
+        LOGGER.debug("Deleting material with id: " + id);
+
+        try {
+            Material deleted = materialService.delete(id);
+
+            addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_MATERIAL_DELETED, deleted.getName());
+        } catch (MaterialNotFoundException e) {
+            LOGGER.debug("No person found with id: " + id);
+            addErrorMessage(attributes, ERROR_MESSAGE_KEY_DELETED_MATERIAL_WAS_NOT_FOUND);
+        }
+
+        return createRedirectViewPath(REQUEST_MAPPING_LIST);
+    }
+
+    @RequestMapping(value = "/material/edit/{id}", method = RequestMethod.GET)
+    public String showEditPersonForm(@PathVariable("id") Long id, Model model, RedirectAttributes attributes) {
+        LOGGER.debug("Rendering edit person form for person with id: " + id);
+
+        Material person = materialService.find(id);
+        if (person == null) {
+            LOGGER.debug("No person found with id: " + id);
+            addErrorMessage(attributes, ERROR_MESSAGE_KEY_EDITED_MATERIAL_WAS_NOT_FOUND);
+            return createRedirectViewPath(REQUEST_MAPPING_LIST);
+        }
+
+        model.addAttribute(MODEL_ATTRIBUTE_MATERIAL, constructFormObject(person));
+
+        return MATERIAL_EDIT_FORM_VIEW;
+    }
+
+
+
+    private MaterialDTO constructFormObject(Material material) {
+        MaterialDTO formObject = new MaterialDTO();
+
+        formObject.setId(material.getMeterialId());
+        formObject.setName(material.getName());
+        formObject.setCategory(material.getCategory());
+
+        return formObject;
+    }
+
+
 
 //    @Autowired
 //    private ConversionService conversionService;
@@ -77,7 +128,7 @@ public class MaterialController {
 //    }
 
 	/*@InitBinder
-	protected void initBinder(ServletRequestDataBinder binder) {
+    protected void initBinder(ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("dd-MM-yyyy"), true));
 		binder.registerCustomEditor(SportType.class, new SportTypeEditorSupport(reservationService));
 	}*/
@@ -133,5 +184,15 @@ public class MaterialController {
         LOGGER.debug("Localized message is: " + localizedFeedbackMessage);
         model.addFlashAttribute(FLASH_FEEDBACK_MESSAGE, localizedFeedbackMessage);
     }
+
+    protected void addErrorMessage(RedirectAttributes model, String code, Object... params) {
+        LOGGER.debug("adding error message with code: " + code + " and params: " + params);
+        Locale current = LocaleContextHolder.getLocale();
+        LOGGER.debug("Current locale is " + current);
+        String localizedErrorMessage = messageSource.getMessage(code, params, current);
+        LOGGER.debug("Localized message is: " + localizedErrorMessage);
+        model.addFlashAttribute(FLASH_ERROR_MESSAGE, localizedErrorMessage);
+    }
+
 
 }
