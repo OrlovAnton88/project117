@@ -22,7 +22,11 @@ public class Approof {
     }
 
     @Id
-    @Column(name = "approofName", unique = true, nullable = false)
+    @Column(name = "approof_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @Column(unique = true, nullable = false)
     private String approofName;
 
     @Column(length = 3000, nullable = false)

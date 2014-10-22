@@ -61,6 +61,11 @@ public class MaterialController {
     @Resource
     CategoryService categoryService;
 
+    @InitBinder
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
+        binder.registerCustomEditor(Category.class, new CategoryEditor(this.categoryService));
+    }
+
     @RequestMapping(value = "/material/create", method = RequestMethod.GET)
     public String showCreateMaterialForm(Model model) {
 
@@ -71,6 +76,24 @@ public class MaterialController {
         model.addAttribute(MODEL_ATTRIBUTE_MATERIAL, new MaterialDTO());
 
         return MATERIAL_ADD_FORM_VIEW;
+    }
+
+    //@Valid
+    @RequestMapping(value = "/material/create", method = RequestMethod.POST)
+    public String submitCreateMaterialForm(@ModelAttribute(MODEL_ATTRIBUTE_MATERIAL) MaterialDTO created,
+                                           BindingResult bindingResult,
+                                           RedirectAttributes attributes) {
+        LOGGER.debug("Create person form was submitted with information: " + created);
+
+        if (bindingResult.hasErrors()) {
+            return MATERIAL_ADD_FORM_VIEW;
+        }
+
+        Material material = materialService.create(created);
+
+        addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_MATERIAL_CREATED, material.getName());
+
+        return createRedirectViewPath(REQUEST_MAPPING_LIST);
     }
 
 
@@ -94,18 +117,40 @@ public class MaterialController {
     public String showEditPersonForm(@PathVariable("id") Long id, Model model, RedirectAttributes attributes) {
         LOGGER.debug("Rendering edit person form for person with id: " + id);
 
-        Material person = materialService.find(id);
-        if (person == null) {
+        Material material = materialService.find(id);
+        if (material == null) {
             LOGGER.debug("No person found with id: " + id);
             addErrorMessage(attributes, ERROR_MESSAGE_KEY_EDITED_MATERIAL_WAS_NOT_FOUND);
             return createRedirectViewPath(REQUEST_MAPPING_LIST);
         }
-
-        model.addAttribute(MODEL_ATTRIBUTE_MATERIAL, constructFormObject(person));
+        List<Category> categories = categoryService.findAll();
+        model.addAttribute(MODEL_ATTRIBUTE_MATERIAL, constructFormObject(material));
+        model.addAttribute(MODEL_ATTRIBUTE_CATEGORIES, categories);
 
         return MATERIAL_EDIT_FORM_VIEW;
     }
 
+    @RequestMapping(value = "/material/edit", method = RequestMethod.POST)
+    public String submitEditMaterialForm(@ModelAttribute(MODEL_ATTRIBUTE_MATERIAL) MaterialDTO updated,
+                                         BindingResult bindingResult,
+                                         RedirectAttributes attributes) {
+        LOGGER.debug("Edit material form was submitted with information: " + updated);
+
+        if (bindingResult.hasErrors()) {
+            LOGGER.debug("Edit person form contains validation errors. Rendering form view.");
+            return MATERIAL_EDIT_FORM_VIEW;
+        }
+
+        try {
+            Material material = materialService.update(updated);
+            addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_MATERIAL_EDITED, material.getName());
+        } catch (MaterialNotFoundException e) {
+            LOGGER.debug("No person was found with id: " + updated.getId());
+            addErrorMessage(attributes, ERROR_MESSAGE_KEY_EDITED_MATERIAL_WAS_NOT_FOUND);
+        }
+
+        return createRedirectViewPath(REQUEST_MAPPING_LIST);
+    }
 
 
     private MaterialDTO constructFormObject(Material material) {
@@ -114,10 +159,10 @@ public class MaterialController {
         formObject.setId(material.getMeterialId());
         formObject.setName(material.getName());
         formObject.setCategory(material.getCategory());
+        formObject.setHtmlText(material.getHtmlText());
 
         return formObject;
     }
-
 
 
 //    @Autowired
@@ -132,29 +177,6 @@ public class MaterialController {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("dd-MM-yyyy"), true));
 		binder.registerCustomEditor(SportType.class, new SportTypeEditorSupport(reservationService));
 	}*/
-
-    @InitBinder
-    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
-        binder.registerCustomEditor(Category.class, new CategoryEditor(this.categoryService));
-    }
-
-    //@Valid
-    @RequestMapping(value = "/material/create", method = RequestMethod.POST)
-    public String submitCreateMaterialForm(@ModelAttribute(MODEL_ATTRIBUTE_MATERIAL) MaterialDTO created,
-                                           BindingResult bindingResult,
-                                           RedirectAttributes attributes) {
-        LOGGER.debug("Create person form was submitted with information: " + created);
-
-        if (bindingResult.hasErrors()) {
-            return MATERIAL_ADD_FORM_VIEW;
-        }
-
-        Material material = materialService.create(created);
-
-        addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_MATERIAL_CREATED, material.getName());
-
-        return createRedirectViewPath(REQUEST_MAPPING_LIST);
-    }
 
 
     @RequestMapping(value = "/material/list", method = RequestMethod.GET)

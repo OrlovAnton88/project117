@@ -31,7 +31,7 @@ public class Material {
     private Category category;
 
     @NotNull
-    @Column
+    @Column(length = 2000)
     private String htmlText;
 
     @NotNull

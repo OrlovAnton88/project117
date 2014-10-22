@@ -20,7 +20,7 @@
 <h1><spring:message code="material.edit.page.title"/></h1>
 
 <div>
-    <form:form action="/person/edit" commandName="person" method="POST">
+    <form:form action="${pageContext.request.contextPath}/material/edit" commandName="material" method="POST">
     <form:hidden path="id"/>
     <div>
         <form:label path="name"><spring:message code="material.label.name"/>:</form:label>
