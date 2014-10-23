@@ -1,5 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 
 <!DOCTYPE html>
@@ -7,77 +9,112 @@
 <head>
     <meta charset="UTF-8">
     <title>Рейтинг группы 117 </title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
-          type="text/css">
+    <link rel="stylesheet" href="<c:url value="/static/bootstrap/css/bootstrap.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/static/css/style.css"/>" type="text/css">
 </head>
 <body>
 <jsp:include page="navigation.jsp"/>
-<div class="container">
-    <%--<div class="row">--%>
-    <%--<div class ="navbar navbar-static-top top_menu">--%>
-    <%--<ul class="nav nav-pills" role="tablist">--%>
-    <%--<li class="active"><a href="#">Главная</a></li>--%>
-    <%--<li><a href="#">Учебные материалы</a></li>--%>
-    <%--<li><a href="#">Расписание</a></li>--%>
-    <%--</ul>--%>
-    <%--</div>--%>
-    <%--</div>--%>
+<div class="container-fluid">
     <div class="row">
-        <%--<h1 class="page-header">&#60;HTML race&#47;&#62;--%>
-            <%--<small>Группа 117</small>--%>
-            <%--<small></small>--%>
-        <%--</h1>--%>
-        <table class="table col-md-12">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Имя</th>
-                <th>Баллов</th>
-                <th>Законченных курсов</th>
-                <th>Курсы</th>
-            </tr>
-            </thead>
+        <div class="col-md-9">
             <c:forEach items="${userList}" var="user" varStatus="status">
-                <tr>
-                    <td>${status.index+1}</td>
-                    <td><span style="color: green;" class="glyphicon glyphicon-thumbs-up"></span>&nbsp;<a
-                            href="<c:out value="${user.htmlAcademyLink}"/>" target="_blank"> <c:out
-                            value="${user.userName}"/> </a></td>
-                    <td><c:out value="${user.scores}"/></td>
-                    <td><c:out value="${user.coursesFinished}"/></td>
-                    <td>
-                        <c:set var="cources" value="${user.userApproofs}"/>
-                            <%--<ul class="list-group">--%>
-                        <c:forEach items="${cources}" var="cource">
-                            <c:if test="${cource.passedTasks > 2}">
-                                <%--<li class="list-group-item">--%>
-                                <c:choose>
-                                    <c:when test="${cource.approof.totalTasks== cource.passedTasks}">
-                                        <h5><span class="label label-success spacedTop"> <c:out
-                                                value="${cource.userApproofName}"/>
+                <div class="col-md-12 user-block">
+                    <div class="row">
+                        <div class="col-md-6 user-name">
+                            <h4>
+                                <small>#<c:out value="${status.index+1}"/></small>
+                                <a
+                                        href="<c:out value="${user.htmlAcademyLink}"/>" target="_blank"> <c:out
+                                        value="${user.userName}"/></a></h4>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4><b id="scores">
+                                        <c:out value="${user.scores}"/>
+                                    </b>
+                                        <small>баллов</small>
+                                    </h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4><b id="finished">
+                                            <fmt:parseNumber var="cf" type="number" value="${user.coursesFinished}"/>
+                                            <c:out value="${cf}"/>
+                                        <c:choose>
+                                        <c:when test="${cf == 1}">
+                                        <small>курс пройден</small>
+                                        </c:when>
+                                        <c:when test="${(cf >= 2) && (cf <=4)}">
+                                        <small>курса пройдено</small>
+                                        </c:when>
+                                        <c:otherwise>
+                                        <small>курсов пройдено</small>
+                                        </c:otherwise>
+                                        </c:choose>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 cource-lables">
+                            <c:set var="cources" value="${user.userApproofs}"/>
+                                <%--<ul class="list-group">--%>
+                            <c:forEach items="${cources}" var="cource">
+                                <c:if test="${cource.passedTasks > 2}">
+                                    <%--<li class="list-group-item">--%>
+                                    <c:choose>
+                                        <c:when test="${cource.approof.totalTasks== cource.passedTasks}">
+                                    <span class="label label-success spacedTop" style="margin: 5px 5px 5px 5px;"> <c:out
+                                            value="${cource.userApproofName}"/>
                                     ( <c:out
-                                                    value="${cource.passedTasks}"/> /<c:out
-                                                    value=" ${cource.approof.totalTasks}"/>) </span></h5>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <h5>  <span class="label label-default spacedTop">
+                                                value="${cource.passedTasks}"/> /<c:out
+                                                value=" ${cource.approof.totalTasks}"/>) </span>
+                                        </c:when>
+                                        <c:otherwise>
+                                    <span class="label label-default spacedTop" style="margin: 5px 5px 5px 5px;">
                                <c:out value="${cource.userApproofName}"/> (
                                             <c:out value="${cource.passedTasks}"/> / <c:out
-                                                value="${cource.approof.totalTasks}"/>)
-                            </span></h5>
-                                    </c:otherwise>
+                                            value="${cource.approof.totalTasks}"/>)
+                            </span>
+                                        </c:otherwise>
 
-                                </c:choose>
-                                <%--</li>--%>
-                            </c:if>
-                        </c:forEach>
-                            <%--</ul>--%>
-                    </td>
-                </tr>
+                                    </c:choose>
+                                </c:if>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </div>
             </c:forEach>
-
-        </table>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <a href="<spring:url value="/index/rescan"/>" class="btn btn-primary btn-lg">
+                        <i class="icon-white glyphicon glyphicon-refresh"></i>
+                        <br>
+                        Я прошел задание!
+                        <br>Обновить результаты!</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h1>
+                                # <br>
+                                <small>Занятие</small>
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="footer">

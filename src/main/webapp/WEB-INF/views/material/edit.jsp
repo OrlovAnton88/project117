@@ -13,7 +13,7 @@
 <head>
     <title><spring:message code="page.title"/></title>
     <link rel="stylesheet" href="<c:url value="/static/css/style.css" />" type="text/css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<c:url value="/static/bootstrap/css/bootstrap.css"/>"/>
 </head>
 <body>
 <jsp:include page="../navigation.jsp"/>

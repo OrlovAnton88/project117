@@ -11,16 +11,22 @@
 <head>
     <title>Admin page</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<c:url value="/static/bootstrap/css/bootstrap.css"/>"/>
 </head>
 <body>
 <div class="container">
     <div class="row">
-        <a href="<c:url value="/admin/uploadApproofs"/>"> <button type="button" class="btn btn-default" id="uploadApproofs">Load HTMLAcademy tasks</button> </a>
-        <a href="<c:url value="/admin/uploadUsers"/>"> <button type="button" class="btn btn-default" id="uploadUsers">upload users</button> </a>
-       <a href="<c:url value="/admin/rescan"/>"> <button type="button" class="btn btn-default" id="rescan">Просканировать HTMLAcademy</button> </a>
+        <a href="<c:url value="/admin/uploadApproofs"/>">
+            <button type="button" class="btn btn-default" id="uploadApproofs">Load HTMLAcademy tasks</button>
+        </a>
+        <a href="<c:url value="/admin/uploadUsers"/>">
+            <button type="button" class="btn btn-default" id="uploadUsers">upload users</button>
+        </a>
+        <a href="<c:url value="/admin/rescan"/>">
+            <button type="button" class="btn btn-default" id="rescan">Просканировать HTMLAcademy</button>
+        </a>
 
     </div>
-    </div>
+</div>
 </body>
 </html>

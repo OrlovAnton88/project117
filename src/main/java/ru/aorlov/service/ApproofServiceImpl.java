@@ -26,9 +26,17 @@ public class ApproofServiceImpl implements ApproofService {
     @Override
     public Approof create(Approof approof) {
 
-        LOGGER.debug("Creating a new approof with information: " + approof);
+        Approof fromDb = approofRepository.findByName(approof.getApproofName());
 
-        return approofRepository.save(approof);
+        if (fromDb == null) {
+
+            LOGGER.debug("Creating a new approof with information: " + approof);
+            return approofRepository.save(approof);
+        }
+
+        LOGGER.debug("Such approof is already exists " + fromDb);
+
+        return fromDb;
     }
 
     @Override
@@ -38,7 +46,7 @@ public class ApproofServiceImpl implements ApproofService {
 
 
     @Override
-    public  Approof findByName(String name){
+    public Approof findByName(String name) {
         return approofRepository.findByName(name);
 
     }

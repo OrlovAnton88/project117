@@ -227,6 +227,11 @@
             <version>12.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.0</version>
+        </dependency>
 
     </dependencies>
     <profiles>
@@ -248,9 +253,11 @@
             <properties>
                 <db.username>${env.OPENSHIFT_MYSQL_DB_USERNAME}</db.username>
                 <db.password>${env.OPENSHIFT_MYSQL_DB_PASSWORD}</db.password>
-                <db.url>jdbc:mysql://${env.OPENSHIFT_MYSQL_DB_HOST}:${env.OPENSHIFT_MYSQL_DB_PORT}/${env.OPENSHIFT_APP_NAME}</db.url>
+                <db.url>
+                    jdbc:mysql://${env.OPENSHIFT_MYSQL_DB_HOST}:${env.OPENSHIFT_MYSQL_DB_PORT}/${env.OPENSHIFT_APP_NAME}
+                </db.url>
             </properties>
-			<build>
+            <build>
                 <resources>
                     <resource>
                         <directory>src/main/resources</directory>
@@ -292,7 +299,7 @@
                         <configuration>
                             <port>8081</port>
                             <path>/project117</path>
-                            <contextFile> </contextFile>
+                            <contextFile></contextFile>
                             <!--<url>http://localhost:8081/project117/</url>-->
                             <uriEncoding>UTF-8</uriEncoding>
                         </configuration>

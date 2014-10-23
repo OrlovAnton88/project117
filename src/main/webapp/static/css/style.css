@@ -2,3 +2,28 @@ body {
     min-height: 1000px;
     padding-top: 70px;
 }
+
+.user-block {
+    background-color: #f8f8f8;
+    border: 1px solid #e7e7e7;
+    margin: 0 0 5px 0;
+    border-radius: 5px;
+}
+
+.update-results-block {
+    background-color: #f8f8f8;
+    border: 1px solid #e7e7e7;
+    border-radius: 5px;
+}
+
+.user-block > div {
+    margin: 3px;
+}
+
+.user-name {
+    padding-left: 0px;
+}
+
+.cource-lables {
+    padding-bottom: 5px;
+}

@@ -8,17 +8,16 @@ package ru.aorlov.web;
  * Description: <br>
  */
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import ru.aorlov.HtmlAcademyParser;
 import ru.aorlov.model.User;
 import ru.aorlov.service.UserService;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 
@@ -30,27 +29,31 @@ public class MainController {
     UserService userService;
 
 
+    @Autowired
+    HtmlAcademyParser htmlAcademyParser;
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String defaultPage(ModelMap map) {
+    public String defaultPage() {
         return "redirect:/index";
     }
 
 
     @RequestMapping("/index")
-    public ModelAndView handleRequest(HttpServletRequest arg0,
-                                      HttpServletResponse arg1) throws Exception {
+    public ModelAndView handleRequest() throws Exception {
 
 
         ModelAndView modelAndView = new ModelAndView("index");
-//        htmlAcademyParser.parseSite();
 
         List<User> list = userService.findAll();
         modelAndView.addObject("userList", list);
         return modelAndView;
     }
-//    public String hello(@RequestParam(value="name", required=false, defaultValue="World") String name, Model model) {
-//        model.addAttribute("name", name);
-//        return "index";
-//    }
+
+    @RequestMapping(value = "/index/rescan", method = RequestMethod.GET)
+    public String rescan() throws Exception {
+        htmlAcademyParser.manualRun();
+        return "redirect:/index";
+    }
+
 
 }

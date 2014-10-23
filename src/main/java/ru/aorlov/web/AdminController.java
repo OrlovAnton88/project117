@@ -35,8 +35,7 @@ public class AdminController {
     @RequestMapping(value = "/admin/rescan", method = RequestMethod.GET)
     public String rescan(HttpServletRequest arg0,
                                HttpServletResponse arg1) throws Exception {
-        htmlAcademyParser.parseSite();
-//        ModelAndView modelAndView = new ModelAndView("admin");
+        htmlAcademyParser.cronRun();
         return "redirect:/admin";
     }
 

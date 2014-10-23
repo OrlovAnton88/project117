@@ -8,18 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import ru.aorlov.model.Approof;
-import ru.aorlov.model.Course;
-import ru.aorlov.model.User;
-import ru.aorlov.model.UserApproof;
-import ru.aorlov.service.ApproofService;
-import ru.aorlov.service.CourseService;
-import ru.aorlov.service.UserApproofService;
-import ru.aorlov.service.UserService;
+import ru.aorlov.model.*;
+import ru.aorlov.service.*;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,8 +33,9 @@ public class HtmlAcademyParser {
     UserService userService;
     @Resource
     CourseService courseService;
+    @Resource
+    UserApproofHistoryService userApproofHistoryService;
 
-    private static HtmlAcademyParser instance = null;
 
     public HtmlAcademyParser() {
         // Exists only to defeat instantiation.
@@ -54,51 +51,71 @@ public class HtmlAcademyParser {
 
     private List<User> cachedUsers;
 
+    @Scheduled(cron = "0 0 */6 * * *")
+    public void cronRun() {
+        parseSite(true);
+    }
 
-    @Scheduled(fixedDelay = 3600000)
-    public void parseSite() {
+    public void manualRun() {
+        parseSite(false);
+    }
 
-        LOGGER.info("Rescanning HTML academy web-site...");
+
+    private void parseSite(boolean isCron) {
+        if (isCron) {
+            LOGGER.info("Cron run. Rescanning HTML academy web-site...");
+        } else {
+            LOGGER.info("Manual run. Rescanning HTML academy web-site...");
+        }
+
         List<User> users = userService.findAll();
+
         Document doc = null;
+
         for (User user : users) {
+
             String link = user.getHtmlAcademyLink();
+            LOGGER.debug("Scanning data from user " + user.getUserName() + "link [" + link + ']');
+
             try {
-               try{
-                   Thread.sleep(1000);
-               } catch (InterruptedException ex){
-                   LOGGER.error("Error waiting 1 sec. ", ex);
-               }
+                sleep(1000L);
                 doc = Jsoup.connect(link).timeout(3000).get();
             } catch (IOException ex) {
-              LOGGER.error("Error getting link [" + link + ']', ex);
+                LOGGER.error("Error getting link [" + link + ']', ex);
             }
-            Elements scoressSum = doc.select(SCORES_SUM);
+
+
+            sleep(1000L);
+
+            Elements scoreSum = doc.select(SCORES_SUM);
             Elements coursesOkNum = doc.select(COURSES_OK_NUM);
             Elements detailedTable = doc.select(DETAILED_TABLE);
 
-            if (scoressSum.size() != 1) {
-                throw new IllegalArgumentException("Not 1  score sum for one user. Link: " + link);
-            }
+            validate(scoreSum, "scoreSum");
+            validate(coursesOkNum, "coursesOkNum");
 
-            if (coursesOkNum.size() != 1) {
-                throw new IllegalArgumentException("Not 1 coursesOkNum for one user. Link: " + link);
-            }
+            int scoresSumInt = Integer.valueOf(scoreSum.get(0).text().replace(" ", ""));
 
-            int scoresSumInt = Integer.valueOf(scoressSum.get(0).text().replace(" ", ""));
             int coursesOkNumInt = Integer.valueOf(coursesOkNum.get(0).text().trim());
 
-
             user.setScores(scoresSumInt);
+
             user.setCoursesFinished(coursesOkNumInt);
 
-            saveApproofs(user, detailedTable);
-
+            parseAndSaveApproofs(user, detailedTable, isCron);
         }
+
         LOGGER.info("Rescanning finished.");
     }
 
-    private void saveApproofs(User user, Elements table) {
+    /**
+     * Parse and save approof for given user
+     *
+     * @param user
+     * @param table
+     * @param isCron
+     */
+    private void parseAndSaveApproofs(User user, Elements table, boolean isCron) {
         if (table.size() != 1) {
             throw new IllegalArgumentException("fail to scrap single table");
         }
@@ -129,17 +146,32 @@ public class HtmlAcademyParser {
 
             Approof approof = approofService.findByName(name);
 
-            UserApproof userApproof = new UserApproof(passed, user,name);
+            UserApproof userApproof = new UserApproof(passed, user, name);
 
             userApproof.setApproof(approof);
 
             userApproofService.save(userApproof);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.set(Calendar.MILLISECOND, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MINUTE, 0);
+
+            if (isCron) {
+                UserApproofHistory userApproofHistory = new UserApproofHistory(
+                        passed,
+                        user,
+                        approof,
+                        calendar.getTime());
+                userApproofHistoryService.create(userApproofHistory);
+            }
         }
     }
 
     public void loadUsers(List<String> links) throws IOException {
         List<User> users = new ArrayList<User>();
-        Document doc = null;
+        Document doc;
         for (String link : links) {
             try {
                 doc = Jsoup.connect(link).timeout(3000).get();
@@ -148,22 +180,14 @@ public class HtmlAcademyParser {
             }
 
             Elements name = doc.select(NAME_PATH);
-            Elements scoressSum = doc.select(SCORES_SUM);
+            Elements scoreSum = doc.select(SCORES_SUM);
             Elements coursesOkNum = doc.select(COURSES_OK_NUM);
 
-            if (name.size() != 1) {
-                throw new IllegalArgumentException("Not 1  name for one user. Link: " + link);
-            }
+            validate(name, "name");
+            validate(scoreSum, "scoreSum");
+            validate(coursesOkNum, "coursesOkNum");
 
-            if (scoressSum.size() != 1) {
-                throw new IllegalArgumentException("Not 1  score sum for one user. Link: " + link);
-            }
-
-            if (coursesOkNum.size() != 1) {
-                throw new IllegalArgumentException("Not 1 coursesOkNum for one user. Link: " + link);
-            }
-
-            int scoresSumInt = Integer.valueOf(scoressSum.get(0).text().replace(" ", ""));
+            int scoresSumInt = Integer.valueOf(scoreSum.get(0).text().replace(" ", ""));
             int coursesOkNumInt = Integer.valueOf(coursesOkNum.get(0).text().trim());
             String nameClean = name.get(0).text();
 
@@ -175,10 +199,17 @@ public class HtmlAcademyParser {
         userService.save(users);
     }
 
+    private void validate(Elements elements, String name) {
+        if (elements.size() != 1) {
+            throw new IllegalArgumentException("Not 1 " + name + "for one user");
+        }
+    }
 
-    public void loadApproofs(){
-      String link =   Links.getLinks().get(0);
-        Document doc= null;
+
+    public void loadApproofs() {
+
+        String link = Links.getLinks().get(0);
+        Document doc = null;
         try {
             doc = Jsoup.connect(link).timeout(3000).get();
         } catch (IOException ex) {
@@ -205,8 +236,8 @@ public class HtmlAcademyParser {
             String name = courseName.get(0).text();
 
             Course course = courseService.find(Course.HTML_ACADEMY);
-            if(course == null){
-                course =  courseService.create(new Course(Course.HTML_ACADEMY, "N/A"));
+            if (course == null) {
+                course = courseService.create(new Course(Course.HTML_ACADEMY, "N/A"));
             }
             Approof approof = new Approof(name, "N/A", total, course);
             approofService.create(approof);
@@ -214,12 +245,17 @@ public class HtmlAcademyParser {
 
     }
 
-
-//    @Scheduled(cron = "0 0/1 * * * *")
-//    public void scanUsers() throws IOException {
-//        LOGGER.info("Scanning users...");
-//        createUsers();
-//    }
-
+    /**
+     * Wait to avoid beeng bunned
+     *
+     * @param time
+     */
+    private void sleep(long time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException ex) {
+            LOGGER.error("Error waiting 1 sec. ", ex);
+        }
+    }
 
 }
