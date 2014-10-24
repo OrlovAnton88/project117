@@ -31,9 +31,14 @@ public class MaterialController {
         ModelAndView modelAndView = new ModelAndView("study_materials");
 
         List<Material> list = materialService.findAll();
-        Material material = list.get(0);
+
+        if (!list.isEmpty()) {
+            Material material = list.get(0);
+            modelAndView.addObject("material", material);
+        }
+
         modelAndView.addObject("materialList", list);
-        modelAndView.addObject("material", material);
+
         return modelAndView;
     }
 
@@ -49,7 +54,6 @@ public class MaterialController {
         modelAndView.addObject("material", material);
         return modelAndView;
     }
-
 
 
 }

@@ -34,8 +34,15 @@
 
         </div>
         <div class="col-md-8 fill" style="border-right: 1px solid #e7e7e7;">
-            <h1><c:out value="${material.name}"/></h1>
-            <c:out value="${material.htmlText}"/>
+            <c:choose>
+                <c:when test="${not empty material}">
+                    <h1><c:out value="${material.name}"/></h1>
+                    <c:out value="${material.htmlText}"/>
+                </c:when>
+                <c:otherwise>
+                    <h2> Материалов не найдено... </h2>
+                </c:otherwise>
+            </c:choose>
         </div>
 
     </div>

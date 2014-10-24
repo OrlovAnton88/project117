@@ -8,14 +8,18 @@ package ru.aorlov.web;
  * Description: <br>
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import ru.aorlov.HtmlAcademyParser;
 import ru.aorlov.model.User;
 import ru.aorlov.service.UserService;
+import ru.aorlov.util.LessonCalendar;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -25,9 +29,14 @@ import java.util.List;
 @RequestMapping("/")
 public class MainController {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(MainController.class);
+
     @Resource
     UserService userService;
 
+
+    @Autowired
+    LessonCalendar lc;
 
     @Autowired
     HtmlAcademyParser htmlAcademyParser;
@@ -53,6 +62,12 @@ public class MainController {
     public String rescan() throws Exception {
         htmlAcademyParser.manualRun();
         return "redirect:/index";
+    }
+
+    @RequestMapping(value = "/get_lesson_json", produces = "application/json")
+    @ResponseBody
+    public String getLessonJson() {
+        return lc.getNextLessonAsJson();
     }
 
 

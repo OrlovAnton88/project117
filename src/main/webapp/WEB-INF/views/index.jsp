@@ -107,9 +107,10 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <h1>
-                                # <br>
+                                <span id="lesson_num">?</span> <br>
                                 <small>Занятие</small>
                             </h1>
+                            <i id="lessond_date">dd-mm-yyyy</i>
                         </div>
                     </div>
                 </div>
@@ -119,5 +120,26 @@
 </div>
 <jsp:include page="footer.jsp"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    $("document").ready(function () {
+                $.ajax({
+                    type: "POST",
+//        contentType: "application/json",
+                    url: '<spring:url value="/get_lesson_json"/>',
+//        data: { name: 'norm' },
+//        dataType: "json"
+                    success: function (data) {
+                        $('#lesson_num').empty().html(data.number);
+                        $('#lessond_date').empty().html(data.date);
+                    },
+                    fail: function () {
+                        alert("fail to request json");
+                    }
+                });
+
+            }
+    );
+
+</script>
 </body>
 </html>
