@@ -64,7 +64,7 @@
                                 <c:if test="${cource.passedTasks > 2}">
                                     <%--<li class="list-group-item">--%>
                                     <c:choose>
-                                        <c:when test="${cource.approof.totalTasks== cource.passedTasks}">
+                                        <c:when test="${cource.approof.totalTasks == cource.passedTasks}">
                                     <span class="label label-success spacedTop" style="margin: 5px 5px 5px 5px;"> <c:out
                                             value="${cource.userApproofName}"/>
                                     ( <c:out
@@ -117,11 +117,7 @@
         </div>
     </div>
 </div>
-<div class="footer">
-    <div class="container">
-        <p class="text-muted"><a href="admin.html" target="_blank"> Admin page</a></p>
-    </div>
-</div>
+<jsp:include page="footer.jsp"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </body>
 </html>

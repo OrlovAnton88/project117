@@ -1,6 +1,14 @@
 body {
-    min-height: 1000px;
+    min-height: 100%;
     padding-top: 70px;
+}
+
+.fill{
+    min-height: 100%;
+}
+
+.footer{
+    border-top: 1px solid #e7e7e7;
 }
 
 .user-block {

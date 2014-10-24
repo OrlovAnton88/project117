@@ -25,7 +25,7 @@
             <div class="errorblock"><c:out value="${errorMessage}"/></div>
         </c:if>
     </div>
-    <h1><spring:message code="material.list.page.title"/></h1>
+    <h1><spring:message code="material.list.page.title"/> <small><a href="<spring:url value="/material/create"/>">создать новый</a> </small></h1>
     <c:if test="${not empty materials}">
     <div class="row">
         <table class="table col-md-12">

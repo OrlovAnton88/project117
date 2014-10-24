@@ -23,8 +23,8 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="<spring:url value="/"/>">Главная</a></li>
-                <li><a href="#about">Учебные материалы</a></li>
-                <li><a href="#contact">Расписание</a></li>
+                <li><a href="<spring:url value="/study_materials"/>">Учебные материалы</a></li>
+                <li><a href="#">Расписание</a></li>
                 <%--<li class="dropdown">--%>
                 <%--<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>--%>
                 <%--<ul class="dropdown-menu" role="menu">--%>
