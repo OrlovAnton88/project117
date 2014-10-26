@@ -1,7 +1,6 @@
 package ru.aorlov.service;
 
-import ru.aorlov.model.Course;
-import ru.aorlov.model.UserApproof;
+import ru.aorlov.model.User;
 import ru.aorlov.model.UserApproofHistory;
 
 import java.util.List;
@@ -14,5 +13,7 @@ public interface UserApproofHistoryService {
     public UserApproofHistory create(UserApproofHistory userApproofHistory);
 
     public List<UserApproofHistory> findAll();
+
+    public List<UserApproofHistory> findAllByUser(User user);
 
 }

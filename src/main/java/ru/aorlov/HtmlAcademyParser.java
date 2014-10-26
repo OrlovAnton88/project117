@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.aorlov.model.*;
 import ru.aorlov.service.*;
+import ru.aorlov.util.ParsingException;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -52,7 +53,9 @@ public class HtmlAcademyParser {
     private List<User> cachedUsers;
 
     @Scheduled(cron = "0 0 */6 * * *")
+//    @Scheduled(fixedDelay = 1000L)
     public void cronRun() {
+        LOGGER.debug("Cron run starting...");
         parseSite(true);
     }
 
@@ -91,12 +94,27 @@ public class HtmlAcademyParser {
             Elements coursesOkNum = doc.select(COURSES_OK_NUM);
             Elements detailedTable = doc.select(DETAILED_TABLE);
 
-            validate(scoreSum, "scoreSum");
-            validate(coursesOkNum, "coursesOkNum");
+            int scoresSumInt = 0;
+            int coursesOkNumInt = 0;
 
-            int scoresSumInt = Integer.valueOf(scoreSum.get(0).text().replace(" ", ""));
+            try {
+                validate(scoreSum, "scoreSum");
+                validate(coursesOkNum, "coursesOkNum");
+            } catch (ParsingException ex) {
+                LOGGER.error("Error validating. Skip user..." + ex.getMessage());
+                LOGGER.error("Set score to 0");
+                user.setScores(scoresSumInt);
+                LOGGER.error("Set passed cources to 0");
+                user.setCoursesFinished(coursesOkNumInt);
+                LOGGER.error("Clearing cources info");
+                userApproofService.deleteAll(user);
 
-            int coursesOkNumInt = Integer.valueOf(coursesOkNum.get(0).text().trim());
+                continue;
+            }
+
+            scoresSumInt = Integer.valueOf(scoreSum.get(0).text().replace(" ", ""));
+
+            coursesOkNumInt = Integer.valueOf(coursesOkNum.get(0).text().trim());
 
             user.setScores(scoresSumInt);
 
@@ -183,9 +201,14 @@ public class HtmlAcademyParser {
             Elements scoreSum = doc.select(SCORES_SUM);
             Elements coursesOkNum = doc.select(COURSES_OK_NUM);
 
-            validate(name, "name");
-            validate(scoreSum, "scoreSum");
-            validate(coursesOkNum, "coursesOkNum");
+            try {
+                validate(name, "name");
+                validate(scoreSum, "scoreSum");
+                validate(coursesOkNum, "coursesOkNum");
+            } catch (ParsingException ex) {
+                LOGGER.error("Error validating. Skip user..." + ex.getMessage());
+                continue;
+            }
 
             int scoresSumInt = Integer.valueOf(scoreSum.get(0).text().replace(" ", ""));
             int coursesOkNumInt = Integer.valueOf(coursesOkNum.get(0).text().trim());
@@ -199,9 +222,11 @@ public class HtmlAcademyParser {
         userService.save(users);
     }
 
-    private void validate(Elements elements, String name) {
-        if (elements.size() != 1) {
-            throw new IllegalArgumentException("Not 1 " + name + "for one user");
+    private void validate(Elements elements, String name) throws ParsingException {
+        if (elements.size() > 1) {
+            throw new ParsingException("More than one " + name + "for one user");
+        } else if (elements.size() == 0) {
+            throw new ParsingException("No " + name + "for one user");
         }
     }
 

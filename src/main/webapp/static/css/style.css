@@ -3,11 +3,11 @@ body {
     padding-top: 70px;
 }
 
-.fill{
+.fill {
     min-height: 100%;
 }
 
-.footer{
+.footer {
     border-top: 1px solid #e7e7e7;
 }
 
@@ -34,4 +34,15 @@ body {
 
 .cource-lables {
     padding-bottom: 5px;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.area {
+    fill: steelblue;
 }

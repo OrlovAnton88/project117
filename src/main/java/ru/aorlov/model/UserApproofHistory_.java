@@ -15,9 +15,9 @@ public class UserApproofHistory_ {
 
     public static volatile SingularAttribute<UserApproofHistory, Integer> passedTasks;
 
-    public static volatile SingularAttribute<UserApproof, User> user;
+    public static volatile SingularAttribute<UserApproofHistory, User> user;
 
-    public static volatile SingularAttribute<UserApproof, Approof> approof;
+    public static volatile SingularAttribute<UserApproofHistory, Approof> approof;
 
     public static volatile SingularAttribute<UserApproofHistory, Date> date;
 

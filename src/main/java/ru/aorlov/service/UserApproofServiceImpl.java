@@ -2,6 +2,7 @@ package ru.aorlov.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.aorlov.model.User;
 import ru.aorlov.model.UserApproof;
 import ru.aorlov.repository.UserApproofRepository;
 
@@ -41,5 +42,10 @@ public class UserApproofServiceImpl implements UserApproofService {
     @Override
     public List<UserApproof> findAll() {
         return userApproofRepository.findAll();
+    }
+
+    public void deleteAll(User user) {
+        List<UserApproof> list = userApproofRepository.findAll(where(userIs(user)));
+        userApproofRepository.delete(list);
     }
 }

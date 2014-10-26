@@ -2,12 +2,17 @@ package ru.aorlov.dto;
 
 import ru.aorlov.model.UserApproof;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by anton on 12.10.14.
  */
-public class UserDTO {
+public class UserDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private Long userId;
 
     private String userName;
 
@@ -18,6 +23,17 @@ public class UserDTO {
     private int coursesFinished;
 
     private List<UserApproof> userApproofs;
+
+    public UserDTO() {
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public String getUserName() {
         return userName;

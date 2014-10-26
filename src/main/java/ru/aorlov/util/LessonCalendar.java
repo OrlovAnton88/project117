@@ -38,12 +38,17 @@ public class LessonCalendar {
     }
 
     public String getLessonsAsJSON() {
-        Gson gson = new GsonBuilder().create();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
+        Gson gson = gsonBuilder.create();
         return gson.toJson(lessons);
     }
 
     public String getNextLessonAsJson() {
-        Gson gson = new GsonBuilder().create();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
+        Gson gson = gsonBuilder.create();
+
         for (Lesson lesson : lessons) {
             if (lesson.getDate().after(new Date())) {
                 return gson.toJson(lesson);
@@ -64,7 +69,7 @@ public class LessonCalendar {
             LOGGER.error("Error parsing start date", ex);
         }
 
-        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Europe/Moscow"));
+        Calendar c = Calendar.getInstance();
         c.setTime(startDate);
         c.set(Calendar.MILLISECOND, 0);
         c.set(Calendar.SECOND, 0);

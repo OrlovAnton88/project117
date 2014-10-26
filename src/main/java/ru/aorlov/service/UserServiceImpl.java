@@ -50,7 +50,9 @@ public class UserServiceImpl implements UserService {
 
     private Sort sortByScoreDesc() {
         return new Sort(Sort.Direction.DESC, "scores");
-    };
+    }
+
+    ;
 
 
     @Transactional
@@ -64,5 +66,11 @@ public class UserServiceImpl implements UserService {
             user.setUserApproofs(user.getUserApproofs());
         }
 
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public User findOne(Long id) {
+        return userRepository.findOne(id);
     }
 }

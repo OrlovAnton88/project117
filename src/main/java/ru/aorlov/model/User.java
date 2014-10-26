@@ -9,9 +9,8 @@ import java.util.List;
  */
 
 @Entity
-@Table(name="USER")
+@Table(name = "USER")
 public class User {
-
 
     public User() {
     }
@@ -32,7 +31,7 @@ public class User {
     }
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "USER_ID", unique = true, nullable = false)
     private Long userId;
 
@@ -48,7 +47,7 @@ public class User {
     @Column
     private int coursesFinished;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy="user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<UserApproof> userApproofs;
 
     public String getHtmlAcademyLink() {

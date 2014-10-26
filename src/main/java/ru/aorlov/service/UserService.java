@@ -11,9 +11,11 @@ public interface UserService {
 
     public User save(User user);
 
-    public List<User>  save(List<User> users);
+    public List<User> save(List<User> users);
 
     public void update(List<User> users);
 
     public List<User> findAll();
+
+    public User findOne(Long id);
 }

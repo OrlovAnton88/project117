@@ -1,7 +1,10 @@
 package ru.aorlov.model;
 
+import com.google.gson.annotations.Expose;
+
 import javax.annotation.Nonnull;
 import javax.persistence.*;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -15,6 +18,7 @@ public class UserApproofHistory {
     private long uahId;
 
     @Column
+    @Expose
     private int passedTasks;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,6 +31,7 @@ public class UserApproofHistory {
 
     @Column
     @Nonnull
+    @Expose
     private Date date;
 
     public UserApproofHistory() {
@@ -89,5 +94,11 @@ public class UserApproofHistory {
                 ", approof=" + approof +
                 ", date=" + date +
                 '}';
+    }
+
+    public static class DateComporator implements Comparator<UserApproofHistory> {
+        public int compare(UserApproofHistory userApproofHistory1, UserApproofHistory userApproofHistory2) {
+            return userApproofHistory1.getDate().compareTo(userApproofHistory2.getDate());
+        }
     }
 }
