@@ -155,6 +155,11 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="<c:url value="/static/html/project_october.html"/>"> <h1>Итоговое задание <br> Октябрь</h1></a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
