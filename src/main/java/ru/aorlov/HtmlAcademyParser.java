@@ -52,7 +52,7 @@ public class HtmlAcademyParser {
 
     private List<User> cachedUsers;
 
-    @Scheduled(cron = "0 0 */6 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
 //    @Scheduled(fixedDelay = 1000L)
     public void cronRun() {
         LOGGER.debug("Cron run starting...");

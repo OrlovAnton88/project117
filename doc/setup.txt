@@ -11,6 +11,14 @@ CREATE DATABASE project117 CHARACTER SET utf8 COLLATE utf8_bin;
 
 insert into cource(courceName, description) values ("html_academy", "n/a");
 
+select uahid from UserApproofHistory
+where uahid not in(
+select uahid from (
+select * from UserApproofHistory
+group by date,approof_id, user_id) un);
+
+
+
           <code>
                 &#60;!DOCTYPE html&#62; <br>
                 &#60;html&#62; <br>
