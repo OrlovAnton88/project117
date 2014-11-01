@@ -23,11 +23,11 @@ public class LessonCalendar {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(LessonCalendar.class);
 
-    private static final int WEDNESDAY = 3;
+    private static final int WEDNESDAY = 4;
     private static final int SATURDAY = 7;
 
-    private static final String START_DATE = "13-09-2014";
-    private static final String END_DATE = "01-05-2015";
+    private static final String START_DATE = "13-09-2014 16:30";
+    private static final String END_DATE = "06-05-2015 18:30";
 
     private List<Lesson> lessons;
 
@@ -57,7 +57,7 @@ public class LessonCalendar {
         return null;
     }
 
-    private List<Lesson> getLessons() {
+    public List<Lesson> getLessons() {
         List<Lesson> lessons = new ArrayList<Lesson>();
 
         Date startDate = null;
@@ -71,32 +71,23 @@ public class LessonCalendar {
 
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
-        c.set(Calendar.MILLISECOND, 0);
-        c.set(Calendar.SECOND, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.HOUR, 0);
+        c.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
 
         int num = 1;
 
         while (c.getTime().before(endDate)) {
             if (c.get(Calendar.DAY_OF_WEEK) == WEDNESDAY) {
-                c.set(Calendar.HOUR, 18);
-                c.set(Calendar.MINUTE, 30);
+                c.add(Calendar.HOUR_OF_DAY, 2);
                 lessons.add(new Lesson(c.getTime(), num));
-                c.set(Calendar.HOUR, 0);
-                c.set(Calendar.MINUTE, 0);
+                c.add(Calendar.HOUR_OF_DAY, -2);
                 num++;
             }
 
             if (c.get(Calendar.DAY_OF_WEEK) == SATURDAY) {
-                c.set(Calendar.HOUR, 16);
-                c.set(Calendar.MINUTE, 30);
                 lessons.add(new Lesson(c.getTime(), num));
-                c.set(Calendar.HOUR, 0);
-                c.set(Calendar.MINUTE, 0);
                 num++;
             }
-            c.add(Calendar.DAY_OF_WEEK, 1);
+            c.add(Calendar.HOUR_OF_DAY, 24);
         }
 
 
@@ -105,11 +96,18 @@ public class LessonCalendar {
 
 
     private Date getDate(String dateSrt) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy");
-
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy HH:mm");
+        sdf.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
         return sdf.parse(dateSrt);
 
     }
 
-
+    /**
+     * For test
+     *
+     * @param lessons
+     */
+    public void setLessons(List<Lesson> lessons) {
+        this.lessons = lessons;
+    }
 }

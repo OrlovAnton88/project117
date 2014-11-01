@@ -41,4 +41,11 @@ public class Lesson {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Lesson{" +
+                "date=" + date +
+                ", number=" + number +
+                '}';
+    }
 }
