@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "USER_APPROOF")
+@Table(name = "user_approof")
 public class UserApproof {
 
     public UserApproof() {
@@ -28,7 +28,7 @@ public class UserApproof {
     private int passedTasks;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "user_id")
     private User user;
 
 
@@ -75,14 +75,6 @@ public class UserApproof {
     public void setUser(User user) {
         this.user = user;
     }
-
-    //    public Approof getApproof() {
-//        return approof;
-//    }
-//
-//    public void setApproof(Approof approof) {
-//        this.approof = approof;
-//    }
 
     public int getPassedTasks() {
         return passedTasks;

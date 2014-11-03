@@ -46,3 +46,13 @@ body {
 .area {
     fill: steelblue;
 }
+
+.task_sum_plus {
+    text-decoration: none;
+    color: #5cb85c;
+}
+
+.task_sum_zero {
+    text-decoration: none;
+    color: #777;
+}

@@ -3,6 +3,7 @@ package ru.aorlov.service;
 import ru.aorlov.model.User;
 import ru.aorlov.model.UserApproofHistory;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,5 +16,7 @@ public interface UserApproofHistoryService {
     public List<UserApproofHistory> findAll();
 
     public List<UserApproofHistory> findAllByUser(User user);
+
+    public List<UserApproofHistory> getApproofHistorySince(User user, Date date);
 
 }

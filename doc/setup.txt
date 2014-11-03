@@ -17,7 +17,9 @@ select uahid from (
 select * from UserApproofHistory
 group by date,approof_id, user_id) un);
 
-
+select uahId, approof_id, date, sum(passedTasks) from user_approof_history
+  where user_id = 9
+  group by date
 
           <code>
                 &#60;!DOCTYPE html&#62; <br>

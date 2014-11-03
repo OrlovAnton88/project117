@@ -12,4 +12,5 @@ import ru.aorlov.model.UserApproofHistory;
 public interface UserApproofHistoryRepository extends JpaRepository<UserApproofHistory, Long>,
         JpaSpecificationExecutor<UserApproofHistory> {
 
+
 }

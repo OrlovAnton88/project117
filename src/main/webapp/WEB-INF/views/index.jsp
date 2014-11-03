@@ -1,8 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
 
 <!DOCTYPE html>
 <html>
@@ -46,44 +46,47 @@
             <c:forEach items="${userList}" var="user" varStatus="status">
                 <div class="col-md-12 user-block">
                     <div class="row">
-                        <div class="col-md-4 user-name">
+                        <div class="col-md-3 user-name">
                             <h4>
-                            <small>#<c:out value="${status.index+1}"/></small>
+                                <small>#<c:out value="${status.index+1}"/></small>
                                 <a
                                         href="<c:out value="${user.htmlAcademyLink}"/>" target="_blank"> <c:out
                                         value="${user.userName}"/></a></h4>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-9">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <h4><b id="scores">
-                                    <c:out value="${user.scores}"/>
+                                        <c:out value="${user.scores}"/>
                                     </b>
                                         <small>баллов</small>
                                     </h4>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <h4><b id="finished">
-                                    <fmt:parseNumber var="cf" type="number" value="${user.coursesFinished}"/>
-                                            <c:out value="${cf}"/>
+                                        <fmt:parseNumber var="cf" type="number" value="${user.coursesFinished}"/>
+                                        <c:out value="${cf}"/> </b>
                                         <c:choose>
-                                        <c:when test="${cf == 1}">
-                                        <small>курс пройден</small>
-                                        </c:when>
-                                        <c:when test="${(cf >= 2) && (cf <=4)}">
-                                        <small>курса пройдено</small>
-                                        </c:when>
-                                        <c:otherwise>
-                                        <small>курсов пройдено</small>
-                                        </c:otherwise>
+                                            <c:when test="${cf == 1}">
+                                                <small>курс пройден</small>
+                                            </c:when>
+                                            <c:when test="${(cf >= 2) && (cf <=4)}">
+                                                <small>курса пройдено</small>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <small>курсов пройдено</small>
+                                            </c:otherwise>
                                         </c:choose>
                                     </h4>
                                 </div>
-                                <div class="col-md-4">
-                                        <%--<button class="btn btn-primary history-button"--%>
-                                        <%--data-toggle="modal"--%>
-                                        <%--data-target=".bs-example-modal-lg"--%>
-                                        <%--data-id="${user.userId}">--%>
+                                <div class="col-md-1">
+                                    <a data-placement="top" data-toggle="tooltip" href="#"
+                                       data-original-title="Выполнено заданий за 7 дней" class="task_sum">
+                                        <h4><b id="lw_res_${user.userId}">0</b>
+                                        </h4>
+                                    </a>
+                                </div>
+                                <div class="col-md-2">
                                     <h4><a class="history-button"
                                            data-toggle="modal"
                                            data-target=".bs-example-modal-lg"
@@ -91,7 +94,6 @@
                                            href="#">
                                         График
                                     </a></h4>
-                                        <%--</button>--%>
                                 </div>
                             </div>
                         </div>
@@ -157,7 +159,8 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <a href="<c:url value="/static/html/project_october.html"/>"> <h1>Итоговое задание <br> Октябрь</h1></a>
+                    <a href="<c:url value="/static/html/project_october.html"/>"><h1>Итоговое задание <br> Октябрь</h1>
+                    </a>
                 </div>
             </div>
         </div>
@@ -191,6 +194,45 @@
 </script>
 
 <script>
+    $(document).ready(function () {
+        $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+    });
+
+    $("document").ready(function () {
+                var userNum = <c:out value="${fn:length(userList)}"/>;
+                for (var i = 1; i < userNum; i++) {
+                    getSum(i);
+                }
+
+            }
+    );
+
+    function getSum(id) {
+        $.ajax({
+            url: '<spring:url value="/get_lw_res"/>',
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            mimeType: 'application/json',
+            data: "{ userId: " + id + "}",
+            success: function (data) {
+                var sum = data[0].sum;
+                var elid = ('#lw_res_' + id).toString();
+                if (sum > 0) {
+                    $(elid).empty().text('+' + sum);
+                } else {
+                    $(elid).empty().text(sum);
+                    $(elid).removeClass("task_sum_plus").addClass("task_sum_zero");
+                }
+
+            },
+            fail: function () {
+                alert("fail to request json");
+            }
+        });
+
+    }
+
 
     $(".history-button").click(function () {
                 var userId = $(this).data('id');

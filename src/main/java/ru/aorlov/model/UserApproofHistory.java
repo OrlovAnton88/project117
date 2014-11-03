@@ -11,6 +11,7 @@ import java.util.Date;
  * Created by anton on 23.10.14.
  */
 @Entity
+@Table(name = "user_approof_history", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date", "approof_id"})})
 public class UserApproofHistory {
 
     @Id
@@ -22,14 +23,14 @@ public class UserApproofHistory {
     private int passedTasks;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "approof_id")
     private Approof approof;
 
-    @Column
+    @Column(name = "date")
     @Nonnull
     @Expose
     private Date date;

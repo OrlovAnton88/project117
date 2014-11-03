@@ -2,9 +2,14 @@ package ru.aorlov.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import ru.aorlov.model.TasksPerDate;
+import ru.aorlov.model.User;
 import ru.aorlov.model.UserApproofHistory;
+import ru.aorlov.service.UserApproofHistoryService;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -12,11 +17,28 @@ import java.util.*;
 /**
  * Created by anton on 26.10.14.
  */
+@Component
 public class TaskPerDateUtil {
+    @Resource
+    UserApproofHistoryService userApproofHistoryService;
+
+
+    @PostConstruct
+    protected void init() {
+//        cacheApproofHistory();
+    }
+
+    public void cacheApproofHistory() {
+        //todo: cache map and etc...
+//       List list =  userApproofHistoryService.findAll();
+
+
+    }
+
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TaskPerDateUtil.class);
 
-    private static Map<String, Integer> getMap(final List<UserApproofHistory> list) {
+    private Map<String, Integer> getMap(final List<UserApproofHistory> list) {
         Map<String, Integer> map = new HashMap<String, Integer>();
         Collections.sort(list, new UserApproofHistory.DateComporator());
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH");
@@ -39,10 +61,18 @@ public class TaskPerDateUtil {
         return map;
     }
 
-    public static List<TasksPerDate> getHistory(final List<UserApproofHistory> list) {
+    public List<TasksPerDate> getSortedHistory(final User user) {
+
+        List<UserApproofHistory> list = userApproofHistoryService.findAllByUser(user);
+
+        return getTaskPerDateList(list);
+    }
+
+    private List<TasksPerDate> getTaskPerDateList(final List<UserApproofHistory> list) {
+
+        Map<String, Integer> map = getMap(list);
 
         List<TasksPerDate> toReturn = new ArrayList<TasksPerDate>();
-        Map<String, Integer> map = getMap(list);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH");
 
@@ -55,10 +85,28 @@ public class TaskPerDateUtil {
             }
             toReturn.add(tasksPerDate);
         }
+        Collections.sort(toReturn, new TasksPerDate.DateComporator());
 
         return toReturn;
 
     }
 
+    public int getApproofHistoryDuringLastWeek(User user) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_WEEK, -7);
+
+        List<UserApproofHistory> list = userApproofHistoryService.getApproofHistorySince(user, calendar.getTime());
+
+        List<TasksPerDate> sumList = getTaskPerDateList(list);
+        if (sumList.isEmpty()) {
+            return 0;
+        }
+        TasksPerDate first = sumList.get(0);
+        TasksPerDate last = sumList.get(sumList.size() - 1);
+
+        return last.getTaskSum() - first.getTaskSum();
+    }
 
 }

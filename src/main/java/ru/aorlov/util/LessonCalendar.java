@@ -71,7 +71,7 @@ public class LessonCalendar {
 
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
-        c.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+//        c.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
 
         int num = 1;
 

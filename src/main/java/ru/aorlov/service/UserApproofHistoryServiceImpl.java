@@ -8,6 +8,7 @@ import ru.aorlov.repository.UserApproofHistoryRepository;
 import ru.aorlov.repository.UserApproofHistorySpecification;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -38,5 +39,9 @@ public class UserApproofHistoryServiceImpl implements UserApproofHistoryService 
     public List<UserApproofHistory> findAllByUser(User user) {
         return userApproofHistoryRepository.findAll(where(UserApproofHistorySpecification.userIs(user)));
 
+    }
+
+    public List<UserApproofHistory> getApproofHistorySince(User user, Date date) {
+        return userApproofHistoryRepository.findAll(where(UserApproofHistorySpecification.userIs(user)).and(UserApproofHistorySpecification.since(date)));
     }
 }

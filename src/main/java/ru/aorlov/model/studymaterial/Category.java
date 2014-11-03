@@ -1,6 +1,6 @@
 package ru.aorlov.model.studymaterial;
 
-import  org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
 
@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
  */
 
 @Entity
-@Table(name = "CATEGORY")
+@Table(name = "category")
 public class Category {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
     private Long categoryId;
 

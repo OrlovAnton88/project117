@@ -10,14 +10,14 @@ import java.util.Date;
  * Created by anton on 18.10.14.
  */
 @Entity
-@Table(name = "MATERIAL")
+@Table(name = "material")
 public class Material {
 
     public Material() {
     }
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
     public Long meterialId;
 

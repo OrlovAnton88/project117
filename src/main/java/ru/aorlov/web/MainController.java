@@ -22,7 +22,6 @@ import ru.aorlov.HtmlAcademyParser;
 import ru.aorlov.dto.UserDTO;
 import ru.aorlov.model.TasksPerDate;
 import ru.aorlov.model.User;
-import ru.aorlov.model.UserApproofHistory;
 import ru.aorlov.service.UserApproofHistoryService;
 import ru.aorlov.service.UserService;
 import ru.aorlov.util.LessonCalendar;
@@ -32,7 +31,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -44,6 +42,9 @@ public class MainController {
 
     @Resource
     UserService userService;
+
+    @Autowired
+    TaskPerDateUtil taskPerDateUtil;
 
 
     @Autowired
@@ -95,11 +96,26 @@ public class MainController {
         UserDTO dto = gson.fromJson(reader, UserDTO.class);
         User user = userService.findOne(dto.getUserId());
 
-        List<UserApproofHistory> list = userApproofHistoryService.findAllByUser(user);
-        List<TasksPerDate> resultList = TaskPerDateUtil.getHistory(list);
-        Collections.sort(resultList, new TasksPerDate.DateComporator());
+        List<TasksPerDate> resultList = taskPerDateUtil.getSortedHistory(user);
+
         return gson.toJson(resultList);
     }
 
+    @RequestMapping(value = "/get_lw_res", method = RequestMethod.POST)
+    @ResponseBody
+    public String getLastWeekResults(HttpServletRequest request,
+                                     HttpServletResponse arg1) throws Exception {
+
+        BufferedReader reader = request.getReader();
+        Gson gson = new GsonBuilder().create();
+        UserDTO dto = gson.fromJson(reader, UserDTO.class);
+        User user = userService.findOne(dto.getUserId());
+
+        int sum = taskPerDateUtil.getApproofHistoryDuringLastWeek(user);
+
+        LOGGER.debug(user.getUserName() + " task for last week : " + sum);
+        return "[{\"sum\": \"" + sum + "\"}]";
+
+    }
 
 }
