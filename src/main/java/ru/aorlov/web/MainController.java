@@ -13,6 +13,7 @@ import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,10 +36,12 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/")
 public class MainController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MainController.class);
+
+    protected static final String VIEW_NAME_HOMEPAGE = "index";
+
 
     @Resource
     UserService userService;
@@ -65,8 +68,7 @@ public class MainController {
     @RequestMapping("/index")
     public ModelAndView handleRequest() throws Exception {
 
-
-        ModelAndView modelAndView = new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView(VIEW_NAME_HOMEPAGE);
 
         List<User> list = userService.findAll();
         modelAndView.addObject("userList", list);

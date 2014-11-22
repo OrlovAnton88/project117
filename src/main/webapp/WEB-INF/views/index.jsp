@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -40,6 +41,7 @@
 
 <body>
 <jsp:include page="navigation.jsp"/>
+<sec:authorize access="isAnonymous()">
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-9">
@@ -376,6 +378,6 @@
     }
 </script>
 
-
+</sec:authorize>
 </body>
 </html>

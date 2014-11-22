@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.aorlov.model.*;
 import ru.aorlov.service.*;
+import ru.aorlov.social.model.Role;
 import ru.aorlov.util.ParsingException;
 
 import javax.annotation.Resource;
@@ -214,7 +215,11 @@ public class HtmlAcademyParser {
             int coursesOkNumInt = Integer.valueOf(coursesOkNum.get(0).text().trim());
             String nameClean = name.get(0).text();
 
-            User user = new User(nameClean, link, scoresSumInt, coursesOkNumInt);
+            //STUB
+            //todo: implement
+            String eMail = "unknown@mail.no";
+
+            User user = new User(nameClean, link, eMail, Role.STUDENT, scoresSumInt, coursesOkNumInt);
 
             users.add(user);
 

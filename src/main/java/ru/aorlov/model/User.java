@@ -1,5 +1,7 @@
 package ru.aorlov.model;
 
+import ru.aorlov.social.model.Role;
+
 import javax.persistence.*;
 import java.util.Comparator;
 import java.util.List;
@@ -12,27 +14,9 @@ import java.util.List;
 @Table(name = "user")
 public class User {
 
-    public User() {
-    }
-
-    public User(String userName, String htmlAcademyLink, int scores, int coursesFinished, List<UserApproof> userApproofs) {
-        this.userName = userName;
-        this.htmlAcademyLink = htmlAcademyLink;
-        this.scores = scores;
-        this.coursesFinished = coursesFinished;
-        this.userApproofs = userApproofs;
-    }
-
-    public User(String userName, String htmlAcademyLink, int scores, int coursesFinished) {
-        this.userName = userName;
-        this.htmlAcademyLink = htmlAcademyLink;
-        this.scores = scores;
-        this.coursesFinished = coursesFinished;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "USER_ID", unique = true, nullable = false)
+    @Column(name = "user_id", unique = true, nullable = false)
     private Long userId;
 
     @Column(unique = true, nullable = false)
@@ -40,6 +24,13 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String htmlAcademyLink;
+
+//    @Column(name = "email", length = 100, nullable = false, unique = true)
+//    private String email;
+//
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "role", length = 20, nullable = false)
+//    private Role role;
 
     @Column
     private int scores;
@@ -49,6 +40,20 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<UserApproof> userApproofs;
+
+
+    public User() {
+    }
+
+
+    public User(String userName, String htmlAcademyLink, String email, Role role, int scores, int coursesFinished) {
+        this.userName = userName;
+        this.htmlAcademyLink = htmlAcademyLink;
+//        this.email = email;
+//        this.role = role;
+        this.scores = scores;
+        this.coursesFinished = coursesFinished;
+    }
 
     public String getHtmlAcademyLink() {
         return htmlAcademyLink;

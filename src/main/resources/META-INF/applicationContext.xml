@@ -6,6 +6,8 @@
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:social="http://www.springframework.org/schema/social"
+       xmlns:facebook="http://www.springframework.org/schema/social/facebook"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 http://www.springframework.org/schema/context
@@ -17,7 +19,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd
 http://www.springframework.org/schema/data/jpa
 http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
 http://www.springframework.org/schema/task
-http://www.springframework.org/schema/task/spring-task.xsd">
+http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/social http://www.springframework.org/schema/social/spring-social.xsd http://www.springframework.org/schema/social/facebook http://www.springframework.org/schema/social/spring-social-facebook.xsd">
     <!--****************************************************************************************
     * Core
     ****************************************************************************************-->
@@ -32,6 +34,7 @@ http://www.springframework.org/schema/task/spring-task.xsd">
     <tx:annotation-driven/>
 
     <jpa:repositories base-package="ru.aorlov.repository"/>
+    <jpa:repositories base-package="ru.aorlov.social.repository"/>
 
     <task:annotation-driven executor="executorWithPoolSizeRange" scheduler="taskScheduler"/>
 
@@ -53,7 +56,12 @@ http://www.springframework.org/schema/task/spring-task.xsd">
 
     <bean id="myEmf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="ru.aorlov.model"/>
+        <property name="packagesToScan">
+            <list>
+                <value>ru.aorlov.model</value>
+                <value>ru.aorlov.social.model</value>
+            </list>
+        </property>
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
         </property>
@@ -66,17 +74,17 @@ http://www.springframework.org/schema/task/spring-task.xsd">
     </bean>
 
     <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
-        <!--<property name="url" value="jdbc:mysql://127.5.199.2:3306/project117"/>-->
-        <!--<property name="username" value="admin9yb13Aj"/>-->
-        <!--<property name="password" value="_G2M89X-DpNC"/>-->
+    <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
+    <!--<property name="url" value="jdbc:mysql://127.5.199.2:3306/project117"/>-->
+    <!--<property name="username" value="admin9yb13Aj"/>-->
+    <!--<property name="password" value="_G2M89X-DpNC"/>-->
     <!--</bean>-->
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-    <property name="url" value="${db.url}" />
-    <property name="username" value="${db.username}"/>
-    <property name="password" value="${db.password}" />
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
@@ -107,5 +115,8 @@ http://www.springframework.org/schema/task/spring-task.xsd">
             <ref bean="localeChangeInterceptor"/>
         </property>
     </bean>
+
+    <import resource="security.xml"/>
+    <import resource="social.xml"/>
 
 </beans>
