@@ -10,6 +10,8 @@ import ru.aorlov.security.dto.CustomUserDetails;
 import ru.aorlov.social.model.UserAccount;
 import ru.aorlov.social.repository.UserAccountRepository;
 
+import java.util.List;
+
 /**
  * Created by anton on 09.11.14.
  */
@@ -59,5 +61,10 @@ public class RepositoryUserDetailsService implements UserDetailsService {
 
         return principal;
 
+    }
+
+    public List<UserAccount> findAllUsers() {
+        LOGGER.debug("Loading all users");
+        return userAccountRepository.findAll();
     }
 }

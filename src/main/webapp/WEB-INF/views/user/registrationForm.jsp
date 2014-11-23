@@ -6,7 +6,8 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
-    <title></title>
+    <title><spring:message code="label.user.registration.page.title"/></title>
+    <meta charset="utf-8">
     <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/app/user.form.js"></script>
 </head>
 <body>
@@ -24,9 +25,9 @@
                 '/user/register'.
             -->
             <form:form action="${pageContext.request.contextPath}/user/register" commandName="user" method="POST"
-                       enctype="utf8" role="form">
+                       role="form">
                 <!-- Add CSRF token to the request. -->
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
                 <!--
                 If the user is using social sign in, add the signInProvider
                 as a hidden field.

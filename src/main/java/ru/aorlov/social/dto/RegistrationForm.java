@@ -26,7 +26,6 @@ public class RegistrationForm {
 
     public static final String FIELD_NAME_EMAIL = "email";
 
-
     @Email
     @NotEmpty
     @Size(max = 100)

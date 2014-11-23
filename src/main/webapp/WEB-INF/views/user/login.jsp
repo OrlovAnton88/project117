@@ -77,24 +77,46 @@
         <div class="panel-body">
             <h2><spring:message code="label.social.sign.in.title"/></h2>
 
-            <div class="row social-button-row">
-                <div class="col-lg-4">
-                    <!-- Add Facebook sign in button -->
-                    <a href="${pageContext.request.contextPath}/auth/facebook">
-                        <button class="btn btn-facebook"><i class="icon-facebook"></i> | <spring:message
-                                code="label.facebook.sign.in.button"/></button>
-                    </a>
-                </div>
-            </div>
-            <div class="row social-button-row">
-                <div class="col-lg-4">
-                    <!-- Add Twitter sign in Button -->
-                    <a href="${pageContext.request.contextPath}/auth/twitter">
-                        <button class="btn btn-twitter"><i class="icon-twitter"></i> | <spring:message
-                                code="label.twitter.sign.in.button"/></button>
-                    </a>
-                </div>
-            </div>
+                <%--<div class="row social-button-row">--%>
+                <%--<div class="col-lg-4">--%>
+                <%--<!-- Add Facebook sign in button -->--%>
+                <%--<a href="${pageContext.request.contextPath}/auth/facebook">--%>
+                <%--<button class="btn btn-facebook"><i class="icon-facebook"></i> | <spring:message--%>
+                <%--code="label.facebook.sign.in.button"/></button>--%>
+                <%--</a>--%>
+                <%--</div>--%>
+                <%--</div>--%>
+                <%--<div class="row social-button-row">--%>
+                <%--<div class="col-lg-4">--%>
+                <%--<!-- Add Twitter sign in Button -->--%>
+                <%--<a href="${pageContext.request.contextPath}/auth/vkontakte">--%>
+                <%--<button class="btn btn-twitter"><i class="icon-vk"></i> | <spring:message--%>
+                <%--code="label.vk.sign.in.button"/></button>--%>
+                <%--</a>--%>
+                <%--</div>--%>
+                <%--</div>--%>
+
+            <form action="<spring:url value="/auth/facebook" />" method="POST">
+                <input type="hidden" name="scope" value="user_photos,offline_access"/>
+                    <%--<div class="formInfo">--%>
+                    <%--<p>You aren't connected to Facebook yet. Click the button to connect Spring Social Showcase with your Facebook account.</p>--%>
+                    <%--</div>--%>
+                <p>
+                    <button type="submit"><img
+                            src="<c:url value="/static/img/social/facebook/sign-in-with-facebook.png"/>"/></button>
+                </p>
+            </form>
+
+            <form action="<spring:url value="/auth/vkontakte"/>" method="POST">
+                <input type="hidden" name="scope" value="notify,photos,offline"/>
+                    <%--<div class="formInfo">--%>
+                    <%--<p>You aren't connected to VKontakte yet. Click the button to connect Spring Social Showcase with your VKontakte account.</p>--%>
+                    <%--</div>--%>
+                <p>
+                    <button type="submit"><img src="<c:url value="/static/img/social/vk/connect_short.png"/>"/></button>
+                </p>
+            </form>
+
         </div>
     </div>
 </sec:authorize>
@@ -108,3 +130,16 @@
 <jsp:include page="../footer.jsp"/>
 </body>
 </html>
+
+
+<form action="<c:url value="/connect/vkontakte" />" method="POST">
+    <input type="hidden" name="scope" value="notify,friends,photos,audio,video,notes,pages,offline"/>
+
+    <div class="formInfo">
+        <p>You aren't connected to VKontakte yet. Click the button to connect Spring Social Showcase with your VKontakte
+            account.</p>
+    </div>
+    <p>
+        <button type="submit"><img src="<c:url value="/resources/social/vkontakte/connect_short.png" />"/></button>
+    </p>
+</form>
