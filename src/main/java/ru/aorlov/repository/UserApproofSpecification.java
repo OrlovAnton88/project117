@@ -1,7 +1,7 @@
 package ru.aorlov.repository;
 
 import org.springframework.data.jpa.domain.Specification;
-import ru.aorlov.model.User;
+import ru.aorlov.model.HtmlAcademyUser;
 import ru.aorlov.model.UserApproof;
 import ru.aorlov.model.UserApproof_;
 
@@ -25,12 +25,12 @@ public class UserApproofSpecification {
         };
     }
 
-    public static Specification<UserApproof> userIs(final User searchTerm) {
+    public static Specification<UserApproof> userIs(final HtmlAcademyUser searchTerm) {
 
         return new Specification<UserApproof>() {
             @Override
             public Predicate toPredicate(Root<UserApproof> courseRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                return cb.equal((courseRoot.<User>get(UserApproof_.user)), searchTerm);
+                return cb.equal((courseRoot.<HtmlAcademyUser>get(UserApproof_.user)), searchTerm);
             }
         };
     }

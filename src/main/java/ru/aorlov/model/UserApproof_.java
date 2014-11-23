@@ -11,9 +11,9 @@ import javax.persistence.metamodel.StaticMetamodel;
 public class UserApproof_ {
 
 
-    public static volatile  SingularAttribute<UserApproof, Integer>  passedTasks;
+    public static volatile SingularAttribute<UserApproof, Integer> passedTasks;
 
-    public static volatile  SingularAttribute<UserApproof, User>  user;
+    public static volatile SingularAttribute<UserApproof, HtmlAcademyUser> user;
 
     public static volatile SingularAttribute<UserApproof, String> userApproofName;
 

@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.aorlov.model.*;
 import ru.aorlov.service.*;
-import ru.aorlov.social.model.Role;
 import ru.aorlov.util.ParsingException;
 
 import javax.annotation.Resource;
@@ -51,7 +50,7 @@ public class HtmlAcademyParser {
     public static final String DETAILED_TABLE = "body > div.container.ha-page-min-height > div:nth-child(2) > div.span9 > table.table.table-bordered.table-striped";
     public static final String BASIC_COURSES = "Базовые курсы";
 
-    private List<User> cachedUsers;
+    private List<HtmlAcademyUser> cachedUsers;
 
     @Scheduled(cron = "0 0 0 * * *")
 //    @Scheduled(fixedDelay = 1000L)
@@ -72,11 +71,11 @@ public class HtmlAcademyParser {
             LOGGER.info("Manual run. Rescanning HTML academy web-site...");
         }
 
-        List<User> users = userService.findAll();
+        List<HtmlAcademyUser> users = userService.findAll();
 
         Document doc = null;
 
-        for (User user : users) {
+        for (HtmlAcademyUser user : users) {
 
             String link = user.getHtmlAcademyLink();
             LOGGER.debug("Scanning data from user " + user.getUserName() + "link [" + link + ']');
@@ -134,7 +133,7 @@ public class HtmlAcademyParser {
      * @param table
      * @param isCron
      */
-    private void parseAndSaveApproofs(User user, Elements table, boolean isCron) {
+    private void parseAndSaveApproofs(HtmlAcademyUser user, Elements table, boolean isCron) {
         if (table.size() != 1) {
             throw new IllegalArgumentException("fail to scrap single table");
         }
@@ -189,7 +188,7 @@ public class HtmlAcademyParser {
     }
 
     public void loadUsers(List<String> links) throws IOException {
-        List<User> users = new ArrayList<User>();
+        List<HtmlAcademyUser> users = new ArrayList<HtmlAcademyUser>();
         Document doc;
         for (String link : links) {
             try {
@@ -215,11 +214,7 @@ public class HtmlAcademyParser {
             int coursesOkNumInt = Integer.valueOf(coursesOkNum.get(0).text().trim());
             String nameClean = name.get(0).text();
 
-            //STUB
-            //todo: implement
-            String eMail = "unknown@mail.no";
-
-            User user = new User(nameClean, link, eMail, Role.STUDENT, scoresSumInt, coursesOkNumInt);
+            HtmlAcademyUser user = new HtmlAcademyUser(nameClean, link, scoresSumInt, coursesOkNumInt);
 
             users.add(user);
 

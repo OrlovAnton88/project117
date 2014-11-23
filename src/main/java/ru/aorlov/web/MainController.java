@@ -13,7 +13,6 @@ import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,8 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import ru.aorlov.HtmlAcademyParser;
 import ru.aorlov.dto.UserDTO;
+import ru.aorlov.model.HtmlAcademyUser;
 import ru.aorlov.model.TasksPerDate;
-import ru.aorlov.model.User;
 import ru.aorlov.service.UserApproofHistoryService;
 import ru.aorlov.service.UserService;
 import ru.aorlov.util.LessonCalendar;
@@ -70,7 +69,7 @@ public class MainController {
 
         ModelAndView modelAndView = new ModelAndView(VIEW_NAME_HOMEPAGE);
 
-        List<User> list = userService.findAll();
+        List<HtmlAcademyUser> list = userService.findAll();
         modelAndView.addObject("userList", list);
         return modelAndView;
     }
@@ -96,7 +95,7 @@ public class MainController {
         Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy HH").create();
 
         UserDTO dto = gson.fromJson(reader, UserDTO.class);
-        User user = userService.findOne(dto.getUserId());
+        HtmlAcademyUser user = userService.findOne(dto.getUserId());
 
         List<TasksPerDate> resultList = taskPerDateUtil.getSortedHistory(user);
 
@@ -111,7 +110,7 @@ public class MainController {
         BufferedReader reader = request.getReader();
         Gson gson = new GsonBuilder().create();
         UserDTO dto = gson.fromJson(reader, UserDTO.class);
-        User user = userService.findOne(dto.getUserId());
+        HtmlAcademyUser user = userService.findOne(dto.getUserId());
 
         int sum = taskPerDateUtil.getApproofHistoryDuringLastWeek(user);
 

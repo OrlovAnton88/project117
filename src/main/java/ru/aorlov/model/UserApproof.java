@@ -14,9 +14,9 @@ public class UserApproof {
 
     }
 
-    public UserApproof(int passedTasks, User user, String userApproofName) {
+    public UserApproof(int passedTasks, HtmlAcademyUser htmlAcademyUser, String userApproofName) {
         this.passedTasks = passedTasks;
-        this.user = user;
+        this.htmlAcademyUser = htmlAcademyUser;
         this.userApproofName = userApproofName;
     }
 
@@ -29,7 +29,7 @@ public class UserApproof {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private HtmlAcademyUser htmlAcademyUser;
 
 
     public String getUserApproofName() {
@@ -56,7 +56,6 @@ public class UserApproof {
     @JoinColumn(name = "approof_id")
     private Approof approof;
 
-
     @Column
     boolean isPassed;
 
@@ -68,12 +67,12 @@ public class UserApproof {
         this.userApproofId = id;
     }
 
-    public User getUser() {
-        return user;
+    public HtmlAcademyUser getUser() {
+        return htmlAcademyUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(HtmlAcademyUser user) {
+        this.htmlAcademyUser = user;
     }
 
     public int getPassedTasks() {
@@ -83,21 +82,4 @@ public class UserApproof {
     public void setPassedTasks(int passedTasks) {
         this.passedTasks = passedTasks;
     }
-
-//    public boolean isPassed() {
-//        if (getApproof().getTotalTasks() == getPassedTasks()) {
-//            return true;
-//        }
-//        return false;
-//    }
-
-//    @Override
-//    public String toString() {
-//        return "UserApproof{" +
-//                "id=" + userApproofId +
-//                ", approof=" + approof +
-//                ", passedTasks=" + passedTasks +
-//                ", isPassed=" + isPassed +
-//                '}';
-//    }
 }

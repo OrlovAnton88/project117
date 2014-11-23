@@ -1,6 +1,6 @@
 package ru.aorlov.service;
 
-import ru.aorlov.model.User;
+import ru.aorlov.model.HtmlAcademyUser;
 import ru.aorlov.model.UserApproofHistory;
 
 import java.util.Date;
@@ -15,8 +15,8 @@ public interface UserApproofHistoryService {
 
     public List<UserApproofHistory> findAll();
 
-    public List<UserApproofHistory> findAllByUser(User user);
+    public List<UserApproofHistory> findAllByUser(HtmlAcademyUser user);
 
-    public List<UserApproofHistory> getApproofHistorySince(User user, Date date);
+    public List<UserApproofHistory> getApproofHistorySince(HtmlAcademyUser user, Date date);
 
 }

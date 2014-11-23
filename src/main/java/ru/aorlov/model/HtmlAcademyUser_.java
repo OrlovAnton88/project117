@@ -6,8 +6,8 @@ import javax.persistence.metamodel.StaticMetamodel;
 /**
  * Created by anton on 12.10.14.
  */
-@StaticMetamodel(User.class)
-public class User_ {
+@StaticMetamodel(HtmlAcademyUser.class)
+public class HtmlAcademyUser_ {
 
-    public static volatile SingularAttribute<User, String> userName;
+    public static volatile SingularAttribute<HtmlAcademyUser, String> userName;
 }

@@ -2,7 +2,7 @@ package ru.aorlov.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.aorlov.model.User;
+import ru.aorlov.model.HtmlAcademyUser;
 import ru.aorlov.model.UserApproofHistory;
 import ru.aorlov.repository.UserApproofHistoryRepository;
 import ru.aorlov.repository.UserApproofHistorySpecification;
@@ -36,12 +36,12 @@ public class UserApproofHistoryServiceImpl implements UserApproofHistoryService 
 
     @Transactional
     @Override
-    public List<UserApproofHistory> findAllByUser(User user) {
+    public List<UserApproofHistory> findAllByUser(HtmlAcademyUser user) {
         return userApproofHistoryRepository.findAll(where(UserApproofHistorySpecification.userIs(user)));
 
     }
 
-    public List<UserApproofHistory> getApproofHistorySince(User user, Date date) {
+    public List<UserApproofHistory> getApproofHistorySince(HtmlAcademyUser user, Date date) {
         return userApproofHistoryRepository.findAll(where(UserApproofHistorySpecification.userIs(user)).and(UserApproofHistorySpecification.since(date)));
     }
 }

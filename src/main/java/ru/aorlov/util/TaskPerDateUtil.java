@@ -3,8 +3,8 @@ package ru.aorlov.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import ru.aorlov.model.HtmlAcademyUser;
 import ru.aorlov.model.TasksPerDate;
-import ru.aorlov.model.User;
 import ru.aorlov.model.UserApproofHistory;
 import ru.aorlov.service.UserApproofHistoryService;
 
@@ -61,7 +61,7 @@ public class TaskPerDateUtil {
         return map;
     }
 
-    public List<TasksPerDate> getSortedHistory(final User user) {
+    public List<TasksPerDate> getSortedHistory(final HtmlAcademyUser user) {
 
         List<UserApproofHistory> list = userApproofHistoryService.findAllByUser(user);
 
@@ -91,7 +91,7 @@ public class TaskPerDateUtil {
 
     }
 
-    public int getApproofHistoryDuringLastWeek(User user) {
+    public int getApproofHistoryDuringLastWeek(HtmlAcademyUser user) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());

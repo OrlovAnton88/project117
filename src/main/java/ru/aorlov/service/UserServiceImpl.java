@@ -3,7 +3,7 @@ package ru.aorlov.service;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.aorlov.model.User;
+import ru.aorlov.model.HtmlAcademyUser;
 import ru.aorlov.repository.UserRepository;
 
 import javax.annotation.Resource;
@@ -23,16 +23,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User save(User user) {
+    public HtmlAcademyUser save(HtmlAcademyUser user) {
         return userRepository.save(user);
     }
 
 
     @Override
     @Transactional(readOnly = true)
-    public List<User> save(List<User> users) {
-        List<User> toReturn = new ArrayList<User>();
-        for (User user : users) {
+    public List<HtmlAcademyUser> save(List<HtmlAcademyUser> users) {
+        List<HtmlAcademyUser> toReturn = new ArrayList<HtmlAcademyUser>();
+        for (HtmlAcademyUser user : users) {
             if (userRepository.findOne(nameIs(user.getUserName())) == null) {
                 toReturn.add(userRepository.save(user));
             }
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<User> findAll() {
+    public List<HtmlAcademyUser> findAll() {
 
         return userRepository.findAll(sortByScoreDesc());
     }
@@ -56,10 +56,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void update(List<User> users) {
+    public void update(List<HtmlAcademyUser> users) {
 
-        for (User user : users) {
-            User userDb = userRepository.findOne(nameIs(user.getUserName()));
+        for (HtmlAcademyUser user : users) {
+            HtmlAcademyUser userDb = userRepository.findOne(nameIs(user.getUserName()));
             user.setScores(user.getScores());
             user.setCoursesFinished(user.getCoursesFinished());
             user.setUserApproofs(user.getUserApproofs());
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public User findOne(Long id) {
+    public HtmlAcademyUser findOne(Long id) {
         return userRepository.findOne(id);
     }
 }

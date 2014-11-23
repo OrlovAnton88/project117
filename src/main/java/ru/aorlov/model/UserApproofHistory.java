@@ -24,7 +24,7 @@ public class UserApproofHistory {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private HtmlAcademyUser user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "approof_id")
@@ -38,7 +38,7 @@ public class UserApproofHistory {
     public UserApproofHistory() {
     }
 
-    public UserApproofHistory(int passedTasks, User user, Approof approof, @Nonnull Date date) {
+    public UserApproofHistory(int passedTasks, HtmlAcademyUser user, Approof approof, @Nonnull Date date) {
         this.passedTasks = passedTasks;
         this.user = user;
         this.approof = approof;
@@ -61,11 +61,11 @@ public class UserApproofHistory {
         this.passedTasks = passedTasks;
     }
 
-    public User getUser() {
+    public HtmlAcademyUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(HtmlAcademyUser user) {
         this.user = user;
     }
 

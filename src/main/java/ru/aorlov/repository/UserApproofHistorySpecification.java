@@ -14,12 +14,12 @@ import java.util.Date;
  */
 public class UserApproofHistorySpecification {
 
-    public static Specification<UserApproofHistory> userIs(final User searchTerm) {
+    public static Specification<UserApproofHistory> userIs(final HtmlAcademyUser searchTerm) {
 
         return new Specification<UserApproofHistory>() {
             @Override
             public Predicate toPredicate(Root<UserApproofHistory> courseRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                return cb.equal((courseRoot.<User>get(UserApproofHistory_.user)), searchTerm);
+                return cb.equal((courseRoot.<HtmlAcademyUser>get(UserApproofHistory_.user)), searchTerm);
             }
         };
     }

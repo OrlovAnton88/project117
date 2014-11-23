@@ -1,8 +1,8 @@
 package ru.aorlov.repository;
 
 import org.springframework.data.jpa.domain.Specification;
-import ru.aorlov.model.User;
-import ru.aorlov.model.User_;
+import ru.aorlov.model.HtmlAcademyUser;
+import ru.aorlov.model.HtmlAcademyUser_;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -14,12 +14,12 @@ import javax.persistence.criteria.Root;
  */
 public class UserSpecification {
 
-    public static Specification<User> nameIs(final String searchTerm) {
+    public static Specification<HtmlAcademyUser> nameIs(final String searchTerm) {
 
-        return new Specification<User>() {
+        return new Specification<HtmlAcademyUser>() {
             @Override
-            public Predicate toPredicate(Root<User> courseRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                return cb.equal(cb.lower(courseRoot.<String>get(User_.userName)), searchTerm);
+            public Predicate toPredicate(Root<HtmlAcademyUser> courseRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                return cb.equal(cb.lower(courseRoot.<String>get(HtmlAcademyUser_.userName)), searchTerm);
             }
         };
     }

@@ -1,6 +1,6 @@
 package ru.aorlov.service;
 
-import ru.aorlov.model.User;
+import ru.aorlov.model.HtmlAcademyUser;
 import ru.aorlov.model.UserApproof;
 
 import java.util.List;
@@ -14,5 +14,5 @@ public interface UserApproofService {
 
     public List<UserApproof> findAll();
 
-    public void deleteAll(User user);
+    public void deleteAll(HtmlAcademyUser user);
 }

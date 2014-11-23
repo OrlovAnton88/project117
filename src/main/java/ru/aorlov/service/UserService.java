@@ -1,6 +1,6 @@
 package ru.aorlov.service;
 
-import ru.aorlov.model.User;
+import ru.aorlov.model.HtmlAcademyUser;
 
 import java.util.List;
 
@@ -9,13 +9,13 @@ import java.util.List;
  */
 public interface UserService {
 
-    public User save(User user);
+    public HtmlAcademyUser save(HtmlAcademyUser user);
 
-    public List<User> save(List<User> users);
+    public List<HtmlAcademyUser> save(List<HtmlAcademyUser> users);
 
-    public void update(List<User> users);
+    public void update(List<HtmlAcademyUser> users);
 
-    public List<User> findAll();
+    public List<HtmlAcademyUser> findAll();
 
-    public User findOne(Long id);
+    public HtmlAcademyUser findOne(Long id);
 }

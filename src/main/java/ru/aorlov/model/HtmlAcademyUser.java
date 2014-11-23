@@ -1,7 +1,5 @@
 package ru.aorlov.model;
 
-import ru.aorlov.social.model.Role;
-
 import javax.persistence.*;
 import java.util.Comparator;
 import java.util.List;
@@ -11,8 +9,8 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "ha_user")
+public class HtmlAcademyUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,32 +23,23 @@ public class User {
     @Column(unique = true, nullable = false)
     private String htmlAcademyLink;
 
-//    @Column(name = "email", length = 100, nullable = false, unique = true)
-//    private String email;
-//
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "role", length = 20, nullable = false)
-//    private Role role;
-
     @Column
     private int scores;
 
     @Column
     private int coursesFinished;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "htmlAcademyUser")
     private List<UserApproof> userApproofs;
 
 
-    public User() {
+    public HtmlAcademyUser() {
     }
 
 
-    public User(String userName, String htmlAcademyLink, String email, Role role, int scores, int coursesFinished) {
+    public HtmlAcademyUser(String userName, String htmlAcademyLink, int scores, int coursesFinished) {
         this.userName = userName;
         this.htmlAcademyLink = htmlAcademyLink;
-//        this.email = email;
-//        this.role = role;
         this.scores = scores;
         this.coursesFinished = coursesFinished;
     }
@@ -103,8 +92,8 @@ public class User {
         this.userId = userId;
     }
 
-    public static class ScoreComparatorDesc implements Comparator<User> {
-        public int compare(User user1, User user2) {
+    public static class ScoreComparatorDesc implements Comparator<HtmlAcademyUser> {
+        public int compare(HtmlAcademyUser user1, HtmlAcademyUser user2) {
             if (user1.getScores() > user2.getScores()) {
                 return -1;
             } else if (user1.getScores() == user2.getScores()) {
@@ -131,7 +120,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
+        HtmlAcademyUser user = (HtmlAcademyUser) o;
 
         if (coursesFinished != user.coursesFinished) return false;
         if (scores != user.scores) return false;

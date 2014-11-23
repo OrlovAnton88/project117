@@ -1,16 +1,16 @@
 package ru.aorlov;
 
-import ru.aorlov.model.User;
+import ru.aorlov.model.HtmlAcademyUser;
 
 import java.util.Comparator;
 
 /**
  * Created by anton on 05.10.14.
  */
-public class ScoreComparatorDesc implements Comparator<User> {
+public class ScoreComparatorDesc implements Comparator<HtmlAcademyUser> {
 
     @Override
-    public int compare(User o1, User o2) {
+    public int compare(HtmlAcademyUser o1, HtmlAcademyUser o2) {
         if (o1.getScores() > o2.getScores()) {
             return -1;
         } else if (o1.getScores() == o2.getScores()) {
@@ -19,8 +19,6 @@ public class ScoreComparatorDesc implements Comparator<User> {
             return 1;
         }
     }
-
-
 
 
 }
