@@ -11,7 +11,7 @@
 
     <security:http use-expressions="true">
         <!-- Enables Spring Security CSRF protection -->
-        <security:csrf/>
+        <!--<security:csrf/>-->
         <!-- Configures the form login -->
         <security:form-login
                 login-page="/login"
@@ -31,7 +31,10 @@
         <security:intercept-url pattern="/signin/**" access="permitAll"/>
         <security:intercept-url pattern="/signup/**" access="permitAll"/>
         <security:intercept-url pattern="/user/register/**" access="permitAll"/>
-        <security:intercept-url pattern="/" access="permitAll"/>
+        <!--<security:intercept-url pattern="/" access="permitAll"/>-->
+        <!--<security:intercept-url pattern="/get_lesson_json" access="permitAll"/>-->
+        <!--<security:intercept-url pattern="/get_history" access="permitAll"/>-->
+        <!--<security:intercept-url pattern="/get_lw_res" access="permitAll"/>-->
 
         <!-- The rest of our application is protected. -->
         <security:intercept-url pattern="/protected/**" access="hasRole('ROLE_USER')"/>

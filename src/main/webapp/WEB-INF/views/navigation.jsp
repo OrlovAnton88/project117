@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--Example http://getbootstrap.com/examples/navbar-fixed-top/--%>
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -39,8 +40,18 @@
                 <%--</li>--%>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Контакты</a></li>
-                <li><a href="#">Вход</a></li>
+                <sec:authorize access="isAuthenticated()">
+                    <li> <a href="<spring:url value="/user_details"/>">
+                        <sec:authentication property="principal.firstName"/>
+                        <sec:authentication property="principal.lastName"/>
+                        </a>
+                    </li>
+                    <li><a href="<spring:url value="/logout"/>">Выход</a></li>
+                </sec:authorize>
+                <%--<li><a href="#">Контакты</a></li>--%>
+                <sec:authorize access="isAnonymous()">
+                    <li><a href="<spring:url value="/login"/>">Вход</a></li>
+                </sec:authorize>
                 <li class="active"><a href="http://vk.com/osnovarabotavinternete" target="_blank">VK</a></li>
             </ul>
         </div>

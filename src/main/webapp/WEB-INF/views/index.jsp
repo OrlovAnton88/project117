@@ -41,7 +41,7 @@
 
 <body>
 <jsp:include page="navigation.jsp"/>
-<sec:authorize access="isAnonymous()">
+<%--<sec:authorize access="isAnonymous()">--%>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-9">
@@ -378,6 +378,6 @@
     }
 </script>
 
-</sec:authorize>
+<%--</sec:authorize>--%>
 </body>
 </html>

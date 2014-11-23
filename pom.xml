@@ -363,10 +363,10 @@
             <id>oav-home</id>
             <properties>
                 <db.username>root</db.username>
-                <db.password>mouse</db.password>
+                <db.password></db.password>
                 <db.url>jdbc:mysql://localhost:3306/project117</db.url>
-                <facebook.app.id>foo</facebook.app.id>
-                <facebook.app.secret>bar</facebook.app.secret>
+                <facebook.app.id>365084080339304</facebook.app.id>
+                <facebook.app.secret>7bb3c35006e09a06c1ba6dcb541635db</facebook.app.secret>
             </properties>
             <build>
                 <resources>
